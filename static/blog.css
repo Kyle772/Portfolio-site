@@ -53,6 +53,7 @@ input[type=text]:focus, textarea:focus, input[type=password]:focus {
 }
 
 body {
+    position: relative;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<form class="newModal flex no-wrap" name="NewModal" method="post">
+    <div class="c1 flex col no-wrap">
+        <label>Title*</label>
+        <input type="text" name="head" value="{{modal.head}}">
+        <label>SubText*</label>
+        <input type="text" name="sub" value="{{modal.sub}}">
+        <label>Main Image*</label>
+        <input type="file" name="mainImage" accept="image/*">
+        <label>Related Images</label>
+        <input type="file" name="images" accept="image/*" multiple>
+        <label>Category</label>
+        <select name="cat" value="{{modal.cat}}">
+            <option value="Logo">Logo</option>
+            <option value="Web">Web</option>
+            <option value="Print">Print</option>
+            <option value="Graphics">Graphics</option>
+            <option value="">None</option>
+        </select>
+    </div>
+    <div class="c2 flex col">
+        <label>Main*</label>
+        <textarea name="main">{{modal.main}}</textarea>
+        <p>{{error}}</p>
+        <input type="submit" value="Submit">
+    </div>
+</form>
+{% endblock %}

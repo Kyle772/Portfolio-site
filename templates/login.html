@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h3 class="underline-div">Login</h3>
+<form method="post" class="login flex col no-wrap" name="login">
+    <label>User</label>
+    <input name="user" type="text">
+    <label>Password</label>
+    <input name="password" type="password">
+    <input type="submit" value="Login">
+    <p>{{ error }}</p>
+</form>
+{% endblock %}

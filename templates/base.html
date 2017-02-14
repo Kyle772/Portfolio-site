@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kyle Diggs</title>
+    <script src="https://use.typekit.net/prq0qjj.js"></script>
+    <script>try{Typekit.load({ async: true });}catch(e){}</script>
+    <link href="/static/base.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    {% block head %}
+    {% endblock %}
+</head>
+
+<body>
+    <header class="header constrain">
+        <img class="logo" src="/images/Logo.png">
+        <a class="t" href="/portfolio">Portfolio</a>
+        <a class="t" href="/resume">Resume</a>
+        <a class="t" href="/pricing">Pricing</a>
+        <a class="t cta" href="/contact">Get in touch!</a>
+    </header>
+    
+    {% block modal %}
+    {% endblock %}
+    
+    <div class="page constrain">
+        {% block content %}
+        {% endblock %}
+    </div>
+    <footer class="footer constrain">
+        {% if user %}
+            <a href="/logout">Admin Logout</a>
+        {% else %}
+            <a href="/login">Admin Login</a>
+        {% endif %}
+    </footer>
+</body>
+
+</html>

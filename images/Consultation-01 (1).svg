@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 20.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Lil_Papers" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 74 94" style="enable-background:new 0 0 74 94;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#3E8ED7;}
+	.st1{fill:#E2F2FB;}
+	.st2{fill:#FFFFFF;}
+	.st3{fill:#C1E5F4;}
+	.st4{fill:#69A9DE;}
+	.st5{clip-path:url(#SVGID_2_);fill:#C1E5F4;}
+</style>
+<g>
+	<path class="st2" d="M68,93H6c-0.6,0-1-0.4-1-1V6c0-0.6,0.4-1,1-1h62c0.6,0,1,0.4,1,1v86C69,92.6,68.6,93,68,93z"/>
+	<path class="st0" d="M68,93v-1H6h0V6l0,0h62v0v86V93v1c1.1,0,2-0.9,2-2V6c0-1.1-0.9-2-2-2H6C4.9,4,4,4.9,4,6v86c0,1.1,0.9,2,2,2h62
+		V93z"/>
+	<polyline class="st0" points="17,34 41,34 41,32 17,32 	"/>
+	<polyline class="st0" points="17,29.5 29,29.5 29,28.5 17,28.5 	"/>
+	<polyline class="st0" points="17,45.5 57,45.5 57,44.5 17,44.5 	"/>
+	<polyline class="st0" points="17,49.5 57,49.5 57,48.5 17,48.5 	"/>
+	<polyline class="st0" points="17,53.5 57,53.5 57,52.5 17,52.5 	"/>
+	<polyline class="st0" points="17,57.5 53,57.5 53,56.5 17,56.5 	"/>
+	<polyline class="st0" points="17,61.5 57,61.5 57,60.5 17,60.5 	"/>
+	<polyline class="st0" points="17,65.5 57,65.5 57,64.5 17,64.5 	"/>
+	<polyline class="st0" points="17,69.5 57,69.5 57,68.5 17,68.5 	"/>
+	<polyline class="st0" points="17,73.5 57,73.5 57,72.5 17,72.5 	"/>
+	<polyline class="st0" points="17,77.5 49,77.5 49,76.5 17,76.5 	"/>
+	<path class="st2" d="M5,9h64c2.2,0,4-1.8,4-4s-1.8-4-4-4h-4H5"/>
+	<path class="st0" d="M5,10h64c2.8,0,5-2.2,5-5c0-2.8-2.2-5-5-5h-4H5v2l60,0l4,0c1.7,0,3,1.3,3,3c0,1.7-1.3,3-3,3H5V10L5,10z"/>
+	<path class="st1" d="M5,77H2c-0.6,0-1-0.4-1-1L1,5.2c0-2.1,1.5-4,3.6-4.2C7,0.8,9,2.7,9,5c0,1.9-1.4,3.5-3.2,3.9C5.4,9,5,9.4,5,9.9
+		V77z"/>
+	<path class="st0" d="M5,77v-1H2h0V5.2C2,4.4,2.3,3.6,2.8,3c0.5-0.6,1.2-0.9,1.9-1l0.2,0L4.7,2C4.8,2,4.9,2,5,2c1.7,0,3,1.3,3,3
+		c0,1.4-1,2.6-2.4,2.9C5.2,8,4.8,8.3,4.5,8.6C4.2,8.9,4,9.4,4,9.9V77H5v-1V77h1V9.9h0l0,0l0,0h0l0,0l0,0c2.3-0.5,4-2.5,4-4.9
+		c0-2.8-2.2-5-5-5C4.8,0,4.7,0,4.5,0L4.3,0l0.2,0C3.2,0.1,2.1,0.8,1.3,1.7C0.5,2.7,0,3.9,0,5.2V76c0,1.1,0.9,2,2,2h4v-1H5z"/>
+</g>
+</svg>

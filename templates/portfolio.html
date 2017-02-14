@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block head %}
+    {% if modal %}
+        <style>
+            .page {
+                -webkit-animation: fly-in 300ms forwards;
+                animation: fly-in 300ms forwards;
+            }
+        </style>
+    {% endif %}
+{% endblock %}
+
+{% block modal %}
+    {% if modal %}
+    <div class="modal t constrain">
+        <div class="infocon flex row nowrap">
+            <img src="/images/{{modal.mainImage}}">
+            <div class="info">
+                <a class="cta title-side" href="/portfolio">X</a>
+                {% if user %}
+                    <a class="cta title-side" href="{{port_id}}/delete">Delete</a>
+                    <a class="cta title-side" href="{{port_id}}/edit">Edit</a>
+                {% endif %}
+                <h3>{{modal.head}}</h3>
+                <p>
+                    Upload date: {{modal.created.strftime("%b %d, %Y")}}
+                <p>
+                <p>{{modal.sub}}</p>
+            </div>
+        </div>
+        <h3>Related images</h3>
+        <div class="images flex row no-wrap">
+        {% for item in modal.images %}
+            <img src="/images/{{item}}">
+        {% endfor %}
+        </div>
+        {{modal.render_txt(modal.main) | safe}}
+    </div>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="intro flex row no-wrap">
+    <img class="face round border" src="/images/picture.jpg"><br>
+    <div>
+        <h3>Kyle Diggs</h3>
+        <p>Logo Designer / Graphic Designer / Illustrator / Printer</p>
+
+        <p>With my experience in graphic and print design I can help you develop your business into a trustworthy and memorable brand. Welcome to my portfolio page! Here you can see some work done by me from a variety of different projects I have worked on across the design and print spectrum. Thank you for your consideration and welcome to my site! Any comments/discussions/feedback can be directed to my <a href="/contact">contact page</a>; where you will get a swift response! 
+        <br><br>
+        Talk soon!</p>
+    </div>
+</div>
+
+<div class="title">
+    {% if user %}
+        <a class="cta title-side" href="/portfolio/new">New</a>
+    {% endif %}
+    <h3 class="underline-div">Portfolio</h3>
+</div>
+<div class="portCon flex wrap spc-btwn">
+{% for item in items %}
+    <a href="/portfolio/{{item.key().id()}}" class="portItem">
+        <img src="/images/{{item.mainImage}}">
+    </a>
+{% endfor %}
+</div>
+{% endblock %}

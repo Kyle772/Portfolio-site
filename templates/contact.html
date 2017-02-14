@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form class="flex col no-wrap" name="contact" method="post">
+    <label>Subject</label>
+    <input name="subj" type="text">
+    <label>Return email address</label>
+    <input name="email" type="email">
+    <label>Body</label>
+    <textarea name="body" class="textarea-tall"></textarea>
+    <input class="t button" type="submit">
+</form>
+{% endblock %}
