@@ -4,7 +4,36 @@ Charcoal 334649
 Cadet 586c70
 Celadon 2c8c99
 Powder fcfff9
+
+https://coolors.co/931621-334649-586c70-2c8c99-fcfff9
 **/
+
+/* Global decorative */
+
+.fancyShadow:before, .fancyShadow:after{
+    position: absolute;
+    content: "";
+    top: 20px;
+    left: 20px;
+    bottom: 0px;
+    width: 80%;
+    height: 90%;
+    z-index: -1;
+    -webkit-transform: rotate(-9deg);
+    transform: rotate(-9deg);
+    background-color: rgba(95, 95, 138, 1);
+    }
+.fancyShadow:before{
+    box-shadow: 10px -10px 0px 15px rgba(95, 95, 138, 1);
+}
+.fancyShadow:after{
+    -webkit-transform: rotate(7deg);
+    transform: rotate(7deg);
+    bottom: 25px;
+    top: auto;
+    background-color: rgba(37, 37, 43, 1);
+    box-shadow: 10px 10px 0px 15px rgba(37, 37, 43, 1);
+}
 
 /*Global*/
 
@@ -90,12 +119,29 @@ a {
     justify-content: space-between;
 }
 
+.spc-arnd {
+    -ms-flex-pack: distribute;
+    justify-content: space-around;
+}
+
+.algn-cntr {
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -ms-grid-row-align: center;
+    align-items: center;
+}
+
 .whiteback {
     background-color: white;
 }
 
 .title-side {
     float: right;
+    margin-top: -20px;
+}
+
+h5.title-side {
+    margin-top: 10px;
 }
 
 .cta {
@@ -110,13 +156,9 @@ a {
 }
 
 .cta:hover {
-    background-color: #2C8C99;
+    background-color: #5F5F8A;
     color: white;
     font-weight: 700;
-}
-
-.title .cta {
-    margin-top: -20px;
 }
 
 .info .cta {
@@ -134,12 +176,34 @@ a {
 }
 
 .button:hover {
-    background-color: #334649;
+    background-color: #25252B;
     font-weight: 700;
 }
 
+/* Inputs */
+
 .textarea-tall {
     min-height: 400px;
+}
+
+input[type=text], input[type=email], input[type=password] {
+    outline: none;
+    border: none;
+    border-bottom: 2px solid #586c70;
+    padding: 10px;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+}
+
+input[type=text]:focus, input[type=email]:focus, input[type=password]:focus, textarea:focus {
+    border-color: #7C7C9F;
+}
+
+textarea {
+    outline: none;
+    border: none;
+    border: 2px solid #586c70;
+    padding: 15px;
 }
 
 
@@ -152,6 +216,12 @@ body {
 
 h1 {
     font-size: 2em;
+}
+
+h1.huge {
+    margin-top: -.5em;
+    line-height: 1em;
+    font-size: 3em;
 }
 
 h2 {
@@ -174,6 +244,23 @@ p {
     font-size: 1em;
 }
 
+.good {
+    color: #42A038;
+}
+
+.txt-cntr {
+    text-align: center;
+}
+
+/* 404 */
+.nf {
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -ms-grid-row-align: center;
+    align-items: center;
+    color: white;
+}
+
 /* Base css */
 
 body {
@@ -188,7 +275,8 @@ body {
     -webkit-box-direction: normal;
     -ms-flex-direction: column;
     flex-direction: column;
-    background-color: #334649;
+    background-color: #171a1c;
+    background-image: url('/images/black-felt.png');
     margin: 0px;
     padding: 0px;
     padding-bottom: 90px;
@@ -235,12 +323,12 @@ body {
 }
 
 .header > a:hover {
-    background-color: rgba(36, 123, 160, 1);
+    background-color: #5F5F8A;
     color: white;
 }
 
 .header > a:focus {
-    background-color: rgba(27, 152, 224, 1);
+    background-color: #8A8AA9;
 }
     
 .header > .cta {
@@ -254,7 +342,7 @@ body {
 }
 
 .header > .cta:hover {
-    background-color: #334649;
+    background-color: #25252B;
     border-radius: 5px;
     height: 40px;
     padding-top: 10px;
@@ -264,10 +352,12 @@ body {
 }
 
 .page { 
+    position: relative;
     background-color: white;
     padding: 30px;
     box-sizing: border-box;
     min-height: calc(100vh - 120px - 60px);
+    z-index: 1;
 }
 
 .intro > img {
@@ -484,4 +574,31 @@ body {
 input[type=submit] {
     max-width: 80px;
     
+}
+
+/* Pricing */
+.pricing {
+    position: relative;
+    margin-top: 60px;
+    margin-bottom: 40px;
+    max-width: 33%;
+    background-color: white;
+    box-shadow: 0 8px 8px -6px rgba(0, 0, 0, .55);
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.pricing-con { 
+    -webkit-box-align: start; 
+    -ms-flex-align: start; 
+    -ms-grid-row-align: flex-start; 
+    align-items: flex-start;
+}
+
+.pricing > .icon-con > .soft-icon {
+    width: 45px;
+}
+
+.pricing > .icon-con {
+    width: 80%;
 }

@@ -25,8 +25,9 @@ from string import letters
 import hashlib
 import hmac
 
+from google.appengine.ext import webapp
 from google.appengine.ext import db
-from google.appengine.api import mail
+import google.appengine.api.mail as mail
 from secret import secret
 
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
@@ -37,11 +38,13 @@ jinja_env = \
 messages = \
     {'wb': "Welcome back!",
      'cbs': 'Come back soon!', 'wl': 'Welcome to the community!',
-     'rd': 'Please use the buttons above to navigate!'}
+     'rd': 'Please use the buttons above to navigate!',
+     'tc': 'I will be in touch soon!'}
 actions = {'li': 'logged in',
            'lo': 'logged out',
            'su': 'registering',
-           'dl': 'deleted an item!'}
+           'dl': 'deleted an item',
+           'em': 'sent an email'}
 
 # ---------------------/
 # --Global Functions--/
@@ -340,7 +343,10 @@ class DeleteModal(Handler):
 class SignUp(Handler):
 
     def get(self):
-        self.render('register.html')
+        if True:
+            self.redirect('/404')
+        else:
+            self.render('register.html')
 
     def post(self):
         user = self.request.get('user')
@@ -422,10 +428,8 @@ class Success(Handler):
 
 
 class NotFound(Handler):
-
     def get(self):
         self.render('404.html')
-        return
             
 # ---------------------/
 # --Pages-------------/
@@ -445,6 +449,10 @@ class Portfolio(Handler):
             db.GqlQuery('select * from ModalDB order by created desc limit 10'
                         )
         self.render('portfolio.html', items=items)
+        
+class Pricing(Handler):
+    def get(self):
+        self.render('pricing.html')
 
 class Modal(Handler):
     def get(self, port_id):
@@ -461,17 +469,23 @@ class Contact(Handler):
         self.render('contact.html')
         
     def post(self):
+        name = self.request.get('name')
         subj = self.request.get('subj')
         body = self.request.get('body')
-        sender_address = self.request.get('email')
+        return_address = self.request.get('email')
+        sender_address = "Contact-form@website-157906.appspotmail.com"
+        body = str("{}\n{}\n\n{}").format(name, return_address, body) 
+        
         
         mail.send_mail(sender=sender_address,
                    to="Contact@KyleDiggs.com",
                    subject=subj,
                    body=body)
+        self.redirect('/success?action=em&message=tc')
 
 app = webapp2.WSGIApplication([
     ('/', Portfolio),
+    ('/pricing', Pricing),
     ('/contact', Contact),
     ('/login', Login),
     ('/logout', Logout),
@@ -483,5 +497,7 @@ app = webapp2.WSGIApplication([
     ('/portfolio/new', NewModal),
     ('/portfolio/([0-9]+)/delete', DeleteModal),
     ('/portfolio/([0-9]+)/edit', EditModal),
-    ('/thanks', Thanks)
+    ('/thanks', Thanks),
+    ('/404', NotFound),
+    ('/.*', NotFound)
     ], debug=True)
