@@ -8,16 +8,25 @@
                 animation: fly-in 300ms forwards;
             }
         </style>
+        <script
+			  src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+			  integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc="
+			  crossorigin="anonymous"></script>
+        <script src="/static/lightbox.js" type="text/javascript"></script>
     {% endif %}
 {% endblock %}
 
 {% block modal %}
     {% if modal %}
-    <div class="modal t constrain">
+    {% if direction %}
+    <div class="modal fly-in-{{ direction }} t constrain">
+    {% else %}
+    <div class="modal fly-in-{{ direction }} t constrain">
+    {% endif %}
         <div class="infocon flex row nowrap">
             <img src="/images/{{modal.mainImage}}">
             <div class="info">
-                <a class="cta title-side" href="/portfolio">X</a>
+                <a class="cta title-side" href="/portfolio/{{home}}?dir=up">X</a>
                 {% if user %}
                     <a class="cta title-side" href="{{port_id}}/delete">Delete</a>
                     <a class="cta title-side" href="{{port_id}}/edit">Edit</a>
@@ -30,9 +39,9 @@
             </div>
         </div>
         <h3>Related images</h3>
-        <div class="images flex row no-wrap">
+        <div class="images flex row wrap spc-arnd">
         {% for item in modal.images %}
-            <img src="/images/{{item}}">
+            <img class="lightbox-img" src="/images/{{item}}">
         {% endfor %}
         </div>
         {{modal.render_txt(modal.main) | safe}}
@@ -40,19 +49,78 @@
     {% endif %}
 {% endblock %}
 
-{% block content %}
-<div class="intro flex row no-wrap">
+{% block port %}
+{% if "about" in page %}
+<div class="intro flex col no-wrap">
     <img class="face round border" src="/images/picture.jpg"><br>
     <div>
         <h3>Kyle Diggs</h3>
-        <p>Logo Designer / Graphic Designer / Illustrator / Printer</p>
+        <p>Full-stack Web Development / Graphic Design / Production Printing</p>
 
         <p>With my experience in graphic and print design I can help you develop your business into a trustworthy and memorable brand. Welcome to my portfolio page! Here you can see some work done by me from a variety of different projects I have worked on across the design and print spectrum. Thank you for your consideration and welcome to my site! Any comments/discussions/feedback can be directed to my <a href="/contact">contact page</a>; where you will get a swift response! 
         <br><br>
         Talk soon!</p>
     </div>
 </div>
-
+{% elif "logo" in page %}
+<div class="title">
+    {% if user %}
+        <a class="cta title-side" href="/portfolio/new">New</a>
+    {% endif %}
+    <h3 class="underline-div">Logos</h3>
+    <div class="portCon flex wrap spc-btwn">
+    {% for item in items %}
+        <a href="/portfolio/logo/{{item.key().id()}}" class="portItem">
+            <img src="/images/{{item.mainImage}}">
+        </a>
+    {% endfor %}
+    </div>
+</div>
+{% elif "web" in page %}
+<div class="title">
+    {% if user %}
+        <a class="cta title-side" href="/portfolio/new">New</a>
+    {% endif %}
+    <h3 class="underline-div">Websites</h3>
+    <!-- WHOOPS. Need to add each page into the system still -->
+    <div class="portCon flex wrap spc-btwn">
+    {% for item in items %}
+        <a href="/portfolio/web/{{item.key().id()}}" class="portItem">
+            <img src="/images/{{item.mainImage}}">
+        </a>
+    {% endfor %}
+    </div>
+</div>
+{% elif "print" in page %}
+<div class="title">
+    {% if user %}
+        <a class="cta title-side" href="/portfolio/new">New</a>
+    {% endif %}
+    <h3 class="underline-div">Print Work</h3>
+    <div class="portCon flex wrap spc-btwn">
+    {% for item in items %}
+        <a href="/portfolio/print/{{item.key().id()}}" class="portItem">
+            <img src="/images/{{item.mainImage}}">
+        </a>
+    {% endfor %}
+    </div>
+</div>
+{% elif "graphics" in page %}
+<div class="title">
+    {% if user %}
+        <a class="cta title-side" href="/portfolio/new">New</a>
+    {% endif %}
+    <h3 class="underline-div">Graphics</h3>
+    <div class="portCon flex wrap spc-btwn">
+    {% for item in items %}
+        <a href="/portfolio/graphics/{{item.key().id()}}" class="portItem">
+            <img src="/images/{{item.mainImage}}">
+        </a>
+    {% endfor %}
+    </div>
+</div>
+{% endif %}
+<!--
 <div class="title">
     {% if user %}
         <a class="cta title-side" href="/portfolio/new">New</a>
@@ -66,4 +134,5 @@
     </a>
 {% endfor %}
 </div>
+-->
 {% endblock %}

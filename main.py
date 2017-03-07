@@ -263,7 +263,7 @@ class NewModal(Handler):
                         )
             m._render_text()
             m.put()
-            link = '/portfolio/{}'.format(m.key().id())
+            link = '/portfolio/{}/{}'.format(cat.lower(), m.key().id())
             self.redirect(link)
             
         else:
@@ -278,7 +278,7 @@ class NewModal(Handler):
                         error=error)
 
 class EditModal(Handler):
-    def get(self, port_id):
+    def get(self, home, port_id):
         if self.get_user():
             mkey = db.Key.from_path('ModalDB', int(port_id))
             modal = db.get(mkey)
@@ -286,7 +286,7 @@ class EditModal(Handler):
         else:
             self.redirect("/login")
         
-    def post(self, port_id):
+    def post(self, home, port_id):
         images = self.request.get_all('images')
         mainImage = self.request.get('mainImage')
         head = self.request.get('head')
@@ -295,27 +295,27 @@ class EditModal(Handler):
         cat = self.request.get('cat')
         error = ""
         
-        self.debug("checking vars")    
-        if head and sub and main and mainImage:
-            mkey = db.Key.from_path('ModalDB', int(port_id))
-            m = db.get(mkey)
+        self.debug("checking vars")
+        
+        mkey = db.Key.from_path('ModalDB', int(port_id))
+        m = db.get(mkey)
+            
+        if images:
+            m.images = images
+        if head:
             m.head = head
+        if sub:
             m.sub = sub
+        if main:
             m.main = main
+        if mainImage:
             m.mainImage = mainImage
-            m.put()
-            link = '/portfolio/{}'.format(m.key().id())
-            self.redirect(link)
-        elif head and sub and main:
-            mkey = db.Key.from_path('ModalDB', int(port_id))
-            m = db.get(mkey)
-            m.head = head
-            m.sub = sub
-            m.main = main
-            m.put()
-            link = '/portfolio/{}'.format(m.key().id())
-            self.redirect(link)
-        else:
+        m.put()
+        
+        link = '/portfolio/{}/{}'.format(cat, m.key().id())
+        self.redirect(link)
+        
+        if not main or not sub or not head:
             error="Please fill out ALL required fields!"
             self.render('newitem.html',
                         images=images,
@@ -326,7 +326,7 @@ class EditModal(Handler):
                         error=error)
 
 class DeleteModal(Handler):
-    def get(self, port_id):
+    def get(self, home, port_id):
         user = self.get_user()
         if user:
             mkey = db.Key.from_path('ModalDB', int(port_id))
@@ -343,7 +343,7 @@ class DeleteModal(Handler):
 class SignUp(Handler):
 
     def get(self):
-        if True:
+        if False:
             self.redirect('/404')
         else:
             self.render('register.html')
@@ -437,32 +437,99 @@ class NotFound(Handler):
     
 class MainPage(Handler):
     def get(self):
-        self.render("portfolio.html")
+        self.render("portfolio.html", multipage=True)
         
 class Resume(Handler):
     def get(self):
         self.render("resume.html")
 
 class Portfolio(Handler):
-    def get(self):
-        items = \
-            db.GqlQuery('select * from ModalDB order by created desc limit 10'
-                        )
-        self.render('portfolio.html', items=items)
+    order = ["about", "logo", "web", "print", "graphics"]
+    links = {
+        "next": "", 
+        "prev": "",
+        "current": ""
+    }
+    
+    def getLinks(self, page_cat):
+        page_cat = page_cat.lower()
+        current = self.order.index(page_cat)
+        self.debug(current)
+        prv = current - 1
+        nxt = current + 1
+        if nxt >= len(self.order):
+            nxt = 0
+        self.links["next"] = self.order[nxt]
+        self.links["prev"] = self.order[prv]
+        self.links["current"] = self.order[current]
+        return self.links["current"]
+    
+    def get(self, page_cat="about"):
+        current = self.getLinks(page_cat)
+        self.debug("page_Cat: " + page_cat)
+        items = ""
+        direction = self.request.get('dir')
+        
+        if page_cat == "about":
+            pass
+        else:
+            items = db.GqlQuery('select * from ModalDB where cat = :1', page_cat)
+        self.debug(items)
+                
+        self.debug(items)
+                
+        self.render('portfolio.html', items=items, direction=direction, multipage=True, links=self.links, page=page_cat)
         
 class Pricing(Handler):
     def get(self):
         self.render('pricing.html')
 
 class Modal(Handler):
-    def get(self, port_id):
+    order = []
+    links = {
+        "next": "", 
+        "prev": "",
+        "current": ""
+    }
+    
+    def popList(self, items):
+        lst = []
+        for item in items:
+            lst.append(str(item.key().id()))
+            
+        return lst
+            
+    
+    def getLinks(self, home, port_id):
+        self.debug(home)
+        items = db.GqlQuery('select * from ModalDB where cat = :1', home)
+        self.debug(items)
+        
+        self.order = self.popList(items)
+
+        self.debug(self.order)
+        current = self.order.index(port_id)
+        prv = current - 1
+        nxt = current + 1
+        if nxt >= len(self.order):
+            nxt = 0
+        self.links["next"] = self.order[nxt]
+        self.links["prev"] = self.order[prv]
+        self.links["current"] = self.order[current]
+        
+        self.debug(self.links)
+        return self.links["current"]
+    
+    def get(self, home, port_id):
         mkey = db.Key.from_path('ModalDB', int(port_id))
         modal = db.get(mkey)
+        direction = self.request.get('dir')
+        links = self.getLinks(home, port_id)
         items = \
             db.GqlQuery('select * from ModalDB order by created desc limit 10'
                         )
         self.debug(items)
-        self.render('portfolio.html', port_id=int(port_id), modal=modal, items=items)
+        self.render('portfolio.html', home=home, direction=direction, multipage=True, links=self.links, port_id=int(port_id), modal=modal, items=items)
         
 class Contact(Handler):
     def get(self):
@@ -492,11 +559,12 @@ app = webapp2.WSGIApplication([
     ('/register', SignUp),
     ('/success', Success),
     ('/resume', Resume),
-    ('/portfolio', Portfolio),
-    ('/portfolio/([0-9]+)', Modal),
     ('/portfolio/new', NewModal),
-    ('/portfolio/([0-9]+)/delete', DeleteModal),
-    ('/portfolio/([0-9]+)/edit', EditModal),
+    ('/portfolio', Portfolio),
+    ('/portfolio/([\w]+)/([0-9]+)', Modal),
+    ('/portfolio/([\w]+)/([0-9]+)/delete', DeleteModal),
+    ('/portfolio/([\w]+)/([0-9]+)/edit', EditModal),
+    ('/portfolio/([\w]+)', Portfolio),
     ('/thanks', Thanks),
     ('/404', NotFound),
     ('/.*', NotFound)
