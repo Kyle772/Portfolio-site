@@ -442,6 +442,10 @@ class MainPage(Handler):
 class Resume(Handler):
     def get(self):
         self.render("resume.html")
+        
+class Store(Handler):
+    def get(self):
+        self.render("store.html")
 
 class Portfolio(Handler):
     order = ["about", "logo", "web", "print", "graphics"]
@@ -565,6 +569,7 @@ app = webapp2.WSGIApplication([
     ('/portfolio/([\w]+)/([0-9]+)/delete', DeleteModal),
     ('/portfolio/([\w]+)/([0-9]+)/edit', EditModal),
     ('/portfolio/([\w]+)', Portfolio),
+    ('/store', Store),
     ('/thanks', Thanks),
     ('/404', NotFound),
     ('/.*', NotFound)
