@@ -14,14 +14,19 @@
 			  crossorigin="anonymous"></script>
         <script src="/js/lightbox.js" type="text/javascript"></script>
     {% endif %}
+    <style media="screen and (max-width:700px)">
+        .header > a:last-child {    
+            margin-bottom: 60px;
+        }
+    </style>
 {% endblock %}
 
 {% block modal %}
     {% if modal %}
     {% if direction %}
-    <div class="port-item fly-in-{{ direction }} t">
+    <div class="port-item constrain fly-in-{{ direction }} t">
     {% else %}
-    <div class="port-item fly-in t">
+    <div class="port-item constrain fly-in t">
     {% endif %}
         <div class="infocon flex row nowrap">
             <img src="/images/{{modal.mainImage}}">
@@ -62,6 +67,12 @@
         <p>With my experience in graphic and print design I can help you develop your business into a trustworthy and memorable brand. Welcome to my portfolio page! Here you can see some work done by me from a variety of different projects I have worked on across the design and print spectrum. Thank you for your consideration and welcome to my site! Any comments/discussions/feedback can be directed to my <a href="/contact">contact page</a>; where you will get a swift response! 
         <br><br>
         Talk soon!</p>
+    </div>
+    <div class="intro-buttons flex row col-1">
+        <a href="/portfolio/logo?dir=right" class="col-4 button t">Logos</a>
+        <a href="/portfolio/web?dir=right" class="col-4 button t">Websites</a>
+        <a href="/portfolio/print?dir=right" class="col-4 button t">Print Work</a>
+        <a href="/portfolio/graphics?dir=right" class="col-4 button t">Graphics</a>
     </div>
 </div>
 {% elif "logo" in page %}

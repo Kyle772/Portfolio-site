@@ -59,8 +59,19 @@
     display: none;
 }
 
-.header > .cta {
-    display: none;
+.header > a:last-child {
+    position: fixed;
+    /*left: 50%;*/
+    right: 0;
+    width: 50%;
+    bottom: 60px;
+    padding-top: 2px;
+    margin: 0;
+    top: auto;
+    /*-webkit-transform: translateX(-50%);
+    transform: translateX(-50%);*/
+    z-index: 100;
+    border-radius: 0;
 }
 
 .header a {
@@ -124,6 +135,15 @@
 
 /*portfolio*/
 
+.intro-buttons {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+    
 .portCon {
     -webkit-box-orient: horizontal;
     -webkit-box-direction: normal;
@@ -135,21 +155,48 @@
 
 .port-item {
     width: 100%;
-    margin-bottom: 135px;
+    margin: 0px;
+    padding: 0;
+    padding-top: 30px;
+}
+
+#Modal-Con > .port-item {
+    padding-bottom: 190px;
 }
 
 .portItem {
-    max-width: 49%;
+    max-width: 48%;
 }
 
 .title > .cta.title-side {
     margin-top: 30px;
 }
 
+.port-item > .infocon > img {
+    margin: auto;
+}
+
+.port-item > .infocon {
+    margin-top: 30px;
+}
+
+.port-buttons {
+    position: absolute;
+    right: 0;
+    top: 20px;
+}
+
+.port {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding-bottom: 190px;
+}
+
 /* New Modal */
 .newModal {
     width: 100%;
-    margin-bottom: 135px;
 }
 
 .newModal > .c1, .newModal > .c2 {
