@@ -39,12 +39,15 @@ messages = \
     {'wb': "Welcome back!",
      'cbs': 'Come back soon!', 'wl': 'Welcome to the community!',
      'rd': 'Please use the buttons above to navigate!',
-     'tc': 'I will be in touch soon!'}
+     'tc': 'I will be in touch soon!',
+     'ts': 'Your testimonial is bring processed! Mention this '\
+     'testimonial for a discount on your next order!'}
 actions = {'li': 'logged in',
            'lo': 'logged out',
            'su': 'registering',
            'dl': 'deleted an item',
-           'em': 'sent an email'}
+           'em': 'sent an email',
+           't': 'leaving a review'}
 
 # ---------------------/
 # --Global Functions--/
@@ -487,6 +490,27 @@ class Portfolio(Handler):
 class Pricing(Handler):
     def get(self):
         self.render('pricing.html')
+        
+    def post(self):
+        name = self.request.get('name')
+        rating = self.request.get('rating')
+        body = self.request.get('body')
+        project = self.request.get('project')
+        return_address = self.request.get('email')
+        sender_address = "Contact-form@website-157906.appspotmail.com"
+        subj = "Testimonial Inbound!"
+        
+        content = str("{}\n{}\n{}\n{}\n\n{}").format(name, return_address, project, rating, body) 
+        
+        if name and body and rating and project and return_address:
+            mail.send_mail(sender=sender_address,
+                       to="Contact@KyleDiggs.com",
+                       subject=subj,
+                       body=content)
+            self.redirect('/thanks?action=su&message=ts')
+        else: 
+            error="It looks like you didn't fill out one of the sections!"
+            self.render('pricing.html', error=error, name=name, rating=rating, body=body, project=project, email=return_address)
 
 class Modal(Handler):
     order = []
@@ -545,14 +569,17 @@ class Contact(Handler):
         body = self.request.get('body')
         return_address = self.request.get('email')
         sender_address = "Contact-form@website-157906.appspotmail.com"
-        body = str("{}\n{}\n\n{}").format(name, return_address, body) 
+        content = str("{}\n{}\n\n{}").format(name, return_address, body) 
         
-        
-        mail.send_mail(sender=sender_address,
-                   to="Contact@KyleDiggs.com",
-                   subject=subj,
-                   body=body)
-        self.redirect('/success?action=em&message=tc')
+        if name and subj and body and return_address:
+            mail.send_mail(sender=sender_address,
+                       to="Contact@KyleDiggs.com",
+                       subject=subj,
+                       body=content)
+            self.redirect('/success?action=em&message=tc')
+        else:
+            error = "One or more sections weren't filled out!"
+            self.render('contact.html', error=error, name=name, subj=subj, body=body, email=return_address)
 
 app = webapp2.WSGIApplication([
     ('/', Portfolio),

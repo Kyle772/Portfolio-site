@@ -1,7 +1,65 @@
 {% extends "base.html" %}
 
+{% block head %}
+    <script
+			  src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+			  integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc="
+			  crossorigin="anonymous"></script>
+    <script type="text/javascript" src="/js/main.js"></script>
+{% endblock %}
+
+{% block modal %}
+{% if direction %}
+<div class="t modal">
+{% else %}
+<div class="t modal">
+{% endif %}
+    <form id="Form" class="testimonial-form flex wrap spc-btwn" name="testimonial" method="post">
+        <div class="col-1">
+            <div id="CloseBut" class="cta modal-cta">X</div>
+            <h3 class="col-1">New Testimonial</h3>
+            {% if error %}
+            <div class="error">
+                <img style="width: 30p; height: 30px;" src="/icons/circle-exclamation-mark.png">
+                <p>{{ error }}</p>
+            </div>
+            {% endif %}
+        </div>
+        <div class="flex col no-wrap col-2 pr">
+            <label>Name:</label>
+            <input name="name" 
+                   type="text" 
+                   placeholder="Enter your name" 
+                   value="{{ name }}">
+            <label>Email Address:</label>
+            <input name="email" 
+                   type="email" 
+                   placeholder="Email required for verification" 
+                   value="{{ email }}">
+        </div>
+        <div class="flex col no-wrap col-2 lp">
+            <label>Company/Project Name:</label>
+            <input name="project" 
+                   type="text" 
+                   placeholder="Enter company or project name"
+                   value="{{ project }}">
+            <label>Rating:</label>
+            <input name="rating" 
+                   type="text" 
+                   placeholder="Rating from 0-5"
+                   value="{{ rating }}">
+        </div>
+        <label>Testimonial:</label>
+        <textarea name="body" 
+                  class="col-1 textarea-med" 
+                  placeholder="Enter your review here">{{ body }}</textarea>
+        <input id="SubBut" class="t button" type="button" value="Submit">
+    </form>
+</div>
+{% endblock %}
+
 {% block content %}
-<h3 class="">Rates</h3>
+<h3>Rates</h3>
 <p>All rates are non-negotiable. Project pricing is based off of estimated time, importance, and estimated ROI.</p>
 <div class="pricing-con flex no-wrap spc-arnd">
     <div class="pricing fancyShadow txt-cntr algn-cntr pricing flex col">
@@ -39,5 +97,10 @@
             <img class="soft-icon" src="/images/Ps.png">
         </div>
     </div>
-</div>     
+</div>
+<div class="testimonial-con">
+    <a href="#Modal-Con" id="AddBut" class="cta title-side">Add</a>
+    <h3>Testimonials</h3>
+    <p>The comprehensive list shown below shows every verified review; good or bad. Press the arrow to the right to toggle the Testimonial form if you'd like to leave a review! Any reviews will be rewarded with a discount code for future orders!</p>
+</div>
 {% endblock %}

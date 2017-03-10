@@ -2,9 +2,13 @@
 <html>
 <head>
     <title>Kyle Diggs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <script src="https://use.typekit.net/prq0qjj.js"></script>
     <script>try{Typekit.load({ async: true });}catch(e){}</script>
     <link href="/static/base.css" rel="stylesheet" type="text/css">
+    <link href="/static/b1000.css" rel="stylesheet" type="text/css" media="screen and (max-width:1025px)">
+    <link href="/static/b700.css" rel="stylesheet" type="text/css" media="screen and (max-width:700px)">
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -19,7 +23,7 @@
     {% endblock %}
 </head>
 
-<body class="flex col">
+<body class="flex col algn-cntr">
     <header class="header constrain">
         <img class="logo" src="/images/Logo.png">
         <a class="t" href="/portfolio">Portfolio</a>
@@ -29,9 +33,15 @@
         <a class="t cta" href="/contact">Get in touch!</a>
     </header>
     
+    {% if error %}
+    <div id="Modal-Con" class="constrain visible flex col algn-cntr">    
+    {% else %}
+    <div id="Modal-Con" class="constrain flex col algn-cntr">    
+    {% endif %}
     {% block modal %}
     {% endblock %}
-    
+    </div>
+        
     {% if multipage and home %}
     <a id="LeftArrow" class="t" href="/portfolio/{{ home }}/{{ links['prev'] }}?dir=left">
         <div>
@@ -66,7 +76,7 @@
         {% endblock %}
     </div>
     
-    <div class="page constrain flex col">
+    <div class="t page constrain flex col">
         {% block content %}
         {% endblock %}
     </div>
