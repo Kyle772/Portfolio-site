@@ -124,9 +124,22 @@
 
 /*portfolio*/
 
+.portCon {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
 .port-item {
     width: 100%;
     margin-bottom: 135px;
+}
+
+.portItem {
+    max-width: 49%;
 }
 
 .title > .cta.title-side {

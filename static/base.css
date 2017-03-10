@@ -510,6 +510,7 @@ body {
 
 .portItem > img {
     background-color: white;
+    margin: 8px;
 }
 
 .images {
