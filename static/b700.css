@@ -52,6 +52,7 @@
     display: -ms-flexbox;
     display: flex;
     box-shadow: 0 -2px 0px rgba(0,0,0,.2);
+    z-index: 100;
 }
 
 .logo {
@@ -81,7 +82,7 @@
 /* Left And Right */
 
 #LeftArrow, #RightArrow {
-    position: relative;
+    position: fixed;
     min-height: 0;
     height: 60px;
     top: inherit;
@@ -95,17 +96,15 @@
     margin-top: -15px;
     box-sizing: border-box;
     cursor: pointer;
-    z-index: 3;
+    z-index: 100;
     bottom: 60px;
 }
 
 #LeftArrow {
-    position: absolute;
     left: 0;
 }
 
 #RightArrow {
-    position: absolute;
     right: 0;
 }
 
@@ -121,4 +120,29 @@
 
 #LeftArrow:hover, #RightArrow:hover {
     background-color: #5F5F8A;
+}
+
+/*portfolio*/
+
+.port-item {
+    width: 100%;
+    margin-bottom: 135px;
+}
+
+.title > .cta.title-side {
+    margin-top: 30px;
+}
+
+/* New Modal */
+.newModal {
+    width: 100%;
+    margin-bottom: 135px;
+}
+
+.newModal > .c1, .newModal > .c2 {
+    width: 100%;
+}
+
+.newModal > .c2 {
+    padding: 0;
 }

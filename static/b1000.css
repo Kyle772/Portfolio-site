@@ -2,10 +2,26 @@
     padding: 0 30px 0 30px;
 }
 
+#Modal-Con.constrain {
+    padding: 0 30px 0 30px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
 .header > .logo {
     margin-left: 30px;
 }
 
 .footer > a {
     margin-left: 30px;
+}
+
+.port-buttons {
+    position: absolute;
+    right: 0;
+    top: 30px;
+}
+
+.info {
+    margin-top: 50px;
 }

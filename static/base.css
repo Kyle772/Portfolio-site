@@ -180,6 +180,10 @@ a {
     margin-top: -20px;
 }
 
+.info .cta {
+    margin-top: 0px;
+}
+
 h5.title-side {
     margin-top: 10px;
 }
@@ -686,7 +690,6 @@ body {
 
 
 #Modal-Con {
-    display: none;
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
@@ -718,6 +721,10 @@ body {
     width: calc(100vw - 300px);
     margin-left: calc(50vw - 150px);
     margin-right: calc(50vw - 150px);
+}
+
+.port-item:parent {
+    display: block !important;
 }
 
 @-webkit-keyframes fly-in {
