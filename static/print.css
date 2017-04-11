@@ -10,25 +10,59 @@ body {
     background-color: white;
 }
 
+.icon-link-con {
+    position: static;
+    margin-left: 30px;
+    margin-top: -10px;
+}
+
+.icon-link-con .icon-link {
+    background-color: white;
+}
+
+.icon-link img {
+    fill: black;
+    width: 30px;
+    height: 30px;
+}
+
 .resume > .c1 {
     background-color: white;
     color: black;
     width: 100%;
     max-width: 100%;
+    padding-top: 0;
+    padding-bottom: 15px;
+}
+
+.resume > .res-abt-sec:first-child {
+    background-color: white;
+    border-bottom: #25252b;
+    color: black;
+    height: 100px;
 }
 
 .resume {
-    -webkit-box-orient: vertical;
+    -webkit-box-orient: horizontal;
     -webkit-box-direction: normal;
-    -ms-flex-direction: column;
-    flex-direction: column;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-box-flex: 3;
+    -ms-flex-positive: 3;
+    flex-grow: 3;
+    -ms-flex-negative: 2;
+    flex-shrink: 2;
 }
 
-.res-abt-sec {
-    width: 49%;
+.resume > .c1 > .res-abt-sec:nth-child(1),
+.resume > .c1 > .res-abt-sec:nth-child(2),
+.resume > .c1 > .res-abt-sec:nth-child(3) {
+    display: none;
 }
 
-.c1 > .left-align {
+.resume > .c1 {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -36,9 +70,45 @@ body {
     -webkit-box-direction: normal;
     -ms-flex-direction: row;
     flex-direction: row;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
     -webkit-box-pack: justify;
     -ms-flex-pack: justify;
     justify-content: space-between;
+}
+
+.resume > .c1 > .res-abt-sec {
+    width: 49%;
+}
+
+.resume > .c2 {
+    width: 100%;
+    max-width: 100%;
+}
+
+.resume > .c2 .res-abt-sec {
+    width: 50%;
+}
+
+.resume > .c2 .res-abt-sec:first-child {
+    margin-right: 15px;
+}
+
+.soft-icon {
+    max-width: 35px;
+    margin: 5px;
+}
+
+.icon-con {
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+}
+
+
+.resume > .c2 {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.p-page {
+    page-break-before: always;
 }
