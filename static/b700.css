@@ -38,9 +38,18 @@
     margin-top: -95px;
 }
 
-
-.resume-nav h1 {
+.resume-nav > h1 {
     margin-top: -25px;
+}
+
+.resume > .res-abt-sec:first-child > p {
+    margin-top: 0px;
+}
+
+@media screen and (max-width: 400px) {
+    .resume-nav > h1 {
+        margin-top: 0px;
+    }
 }
 
 .icon-link-con {
@@ -248,4 +257,10 @@
 /* Admin Dashboard */
 .dash-but {
     margin-bottom: 15px;
+}
+
+/* Pricing */
+.pricing {
+    width: 100%;
+    max-width: 100%;
 }
