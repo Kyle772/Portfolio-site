@@ -1,5 +1,4 @@
 .constrain {
-    padding: 0 30px 0 30px;
 }
 
 #Modal-Con.constrain {
@@ -12,24 +11,11 @@
     margin-left: 30px;
 }
 
-.footer > a {
-    margin-left: 30px;
-}
-
-.port-buttons {
-    position: absolute;
-    right: 0;
-    top: 30px;
-}
-
-.port {
-    padding-bottom: 90px;
-}
-
 .info {
     margin-top: 50px;
 }
 
 .portItem {
     max-width: 32%;
+    padding: 0;
 }

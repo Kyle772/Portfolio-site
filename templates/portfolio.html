@@ -18,13 +18,20 @@
         .header > a:last-child {    
             margin-bottom: 60px;
         }
+        .page {
+            padding-bottom: 0;
+        }
     </style>
 {% endblock %}
 
 {% block modal %}
-    {% if modal %}
+
+{% endblock %}
+
+{% block port %}
+{% if modal %}
     {% if direction %}
-    <div class="port-item constrain fly-in-{{ direction }} t">
+        <div class="port-item constrain fly-in-{{ direction }} t">
     {% else %}
     <div class="port-item constrain fly-in t">
     {% endif %}
@@ -37,11 +44,11 @@
                 <p>
                 <p>{{modal.sub}}</p>
             </div>
-            <div class="port-buttons">
-                <a class="cta title-side" href="/portfolio/{{home}}?dir=up">X</a>
+            <div class="flex row no-wrap port-buttons">
+                <a class="cta t title-side" href="/portfolio/{{home}}?dir=up">X</a>
                 {% if user %}
-                    <a class="cta title-side" href="{{port_id}}/delete">Delete</a>
-                    <a class="cta title-side" href="{{port_id}}/edit">Edit</a>
+                    <a class="cta t title-side" href="{{port_id}}/delete">Delete</a>
+                    <a class="cta t title-side" href="{{port_id}}/edit">Edit</a>
                 {% endif %}
             </div>
         </div>
@@ -53,11 +60,7 @@
         </div>
         {{modal.render_txt(modal.main) | safe}}
     </div>
-    {% endif %}
-{% endblock %}
-
-{% block port %}
-{% if "about" in page %}
+{% elif "about" in page %}
 <div class="intro flex col no-wrap">
     <img class="face round border" src="/images/picture.jpg"><br>
     <div>

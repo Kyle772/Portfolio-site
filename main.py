@@ -20,6 +20,7 @@ import webapp2
 import jinja2
 import logging
 import random
+from admins import admins as admins
 
 from string import letters
 import hashlib
@@ -70,8 +71,14 @@ class Handler(webapp2.RequestHandler):
 
     def render(self, template, **kw):
         user = self.get_user()
+        self.debug("User: {}".format(user))
+        if user:
+            name = user.name
+        else:
+            name = ''
         navTab = self.get_navTab()
-        self.write(self.render_str(template, user=user, navTab=navTab, **kw))
+        self.debug("{} {}".format(name, admins))
+        self.write(self.render_str(template, user=user, navTab=navTab, name=name, admins=admins, **kw))
         
     def debug(self, text):
         logging.info(str(text))
@@ -587,6 +594,14 @@ class Contact(Handler):
             error = "One or more sections weren't filled out!"
             self.render('contact.html', error=error, name=name, subj=subj, body=body, email=return_address)
 
+class Dashboard(Handler):
+    def get(self):
+        user = self.get_user().name.lower()
+        if user in admins:
+            self.render('dash.html')
+        else: 
+            self.redirect('/404')
+            
 app = webapp2.WSGIApplication([
     ('/', Portfolio),
     ('/pricing', Pricing),
@@ -596,6 +611,7 @@ app = webapp2.WSGIApplication([
     ('/register', SignUp),
     ('/success', Success),
     ('/resume', Resume),
+    ('/dashboard', Dashboard),
     ('/portfolio/new', NewModal),
     ('/portfolio', Portfolio),
     ('/portfolio/([\w]+)/([0-9]+)', Modal),
