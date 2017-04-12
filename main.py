@@ -70,7 +70,8 @@ class Handler(webapp2.RequestHandler):
 
     def render(self, template, **kw):
         user = self.get_user()
-        self.write(self.render_str(template, user=user, **kw))
+        navTab = self.get_navTab()
+        self.write(self.render_str(template, user=user, navTab=navTab, **kw))
         
     def debug(self, text):
         logging.info(str(text))
@@ -98,6 +99,11 @@ class Handler(webapp2.RequestHandler):
 
     def get_user(self):
         return User.by_id(self.read_cookie('user-id'))
+    
+    def get_navTab(self):
+        s = str(self.request.path)
+        self.debug("navTab: {}".format(s))
+        return s
 
     def login(self, user):
         self.make_cookie('user-id', str(user.key().id()))

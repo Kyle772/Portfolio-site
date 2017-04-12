@@ -392,6 +392,20 @@ body {
     z-index: 100;
 }
 
+.header > a.active {
+    position: relative;
+}
+
+.header > a.active:after {
+    position: absolute;
+    content: "";
+    height: 5px;
+    background-color: #5F5F8A;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+} 
+
 .header > a {
     box-sizing: border-box;
     height: 60px;
