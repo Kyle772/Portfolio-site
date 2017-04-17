@@ -90,6 +90,34 @@
     left: 10px;
 }
 
+/* resume page - language card */
+
+.icon-con {
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -ms-flex-line-pack: justify;
+    align-content: space-between;
+}
+
+.language-con {
+    width: 46%;
+    min-width: 170px;
+    -ms-flex-negative: 1;
+    flex-shrink: 2;
+}
+
+.language-con:nth-child(odd) {
+    margin-right: 15px;
+}
+
+.language-con:nth-child(even) {
+    margin-left: 15px;
+}
+
+.language-con:last-child {
+    margin: 0;
+}
+
 /* Header */
 .header {
     position: fixed;

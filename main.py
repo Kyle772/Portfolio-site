@@ -249,7 +249,14 @@ class ModalDB(db.Model):
     def render_txt(cls, text):
         return text.replace('\n', '<br>')
         
-        
+class Card(db.Model):
+    name = db.StringProperty()
+    time = db.IntegerProperty(default=1)
+    exp = db.IntegerProperty()
+    
+    def render(self):
+        return self.render('language-card.html', card=self)
+    
 class NewModal(Handler):
     def get(self):
         if self.get_user():
@@ -457,6 +464,7 @@ class MainPage(Handler):
         
 class Resume(Handler):
     def get(self):
+#        cards = 
         self.render("resume.html")
         
 class Store(Handler):

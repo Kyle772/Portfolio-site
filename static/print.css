@@ -1,3 +1,11 @@
+html body > * {
+    visibility: hidden;
+}
+
+.resume {
+    visibility: visible;
+}
+
 .header {
     display: none;
 }
@@ -8,16 +16,43 @@
 
 body {
     background-color: white;
+    background-image: none;
+}
+
+.underline-div {
+    border: 0;
+}
+
+.resume-nav {
+    position: relative;
+    padding-right: 30px;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    height: 120px;
+    width: 100%;
+}
+
+.resume .res-abt-sec:first-child > p {
+    width: 250px;
+}
+
+.resume .res-abt-sec:first-child > p:after {
+    content: "(760) 880-0723"
 }
 
 .icon-link-con {
-    position: static;
-    margin-left: 30px;
-    margin-top: -10px;
+    position: relative;
+    left: 0;
+    height: 40px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .icon-link-con .icon-link {
     background-color: white;
+    padding-left: 0;
 }
 
 .icon-link img {
@@ -33,13 +68,15 @@ body {
     max-width: 100%;
     padding-top: 0;
     padding-bottom: 15px;
+    -webkit-box-ordinal-group: 4;
+    -ms-flex-order: 3;
+    order: 3;
 }
 
 .resume > .res-abt-sec:first-child {
     background-color: white;
     border-bottom: #25252b;
     color: black;
-    height: 100px;
 }
 
 .resume {
@@ -57,26 +94,29 @@ body {
 }
 
 .resume > .c1 > .res-abt-sec:nth-child(1),
-.resume > .c1 > .res-abt-sec:nth-child(2),
-.resume > .c1 > .res-abt-sec:nth-child(3) {
+.resume > .c1 > .res-abt-sec:nth-child(3){
     display: none;
+}
+
+.resume > .c1 a {
+    color: rgba(36, 123, 160, 1);
+}
+
+.resume > .res-abt-sec:first-child {
+    padding-bottom: 0;
 }
 
 .resume > .c1 {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: row;
-    flex-direction: row;
     -webkit-box-pack: justify;
     -ms-flex-pack: justify;
     justify-content: space-between;
 }
 
 .resume > .c1 > .res-abt-sec {
-    width: 49%;
+    width: 100%;
 }
 
 .resume > .c2 {
@@ -85,7 +125,7 @@ body {
 }
 
 .resume > .c2 .res-abt-sec {
-    width: 50%;
+    width: 100%;
 }
 
 .resume > .c2 .res-abt-sec:first-child {
@@ -101,8 +141,43 @@ body {
     -webkit-box-pack: start;
     -ms-flex-pack: start;
     justify-content: flex-start;
+    margin-top: 15px;
 }
 
+.language-con {
+    width: 25%;
+    max-width: 25%;
+    height: 60px;
+    box-sizing: border-box;
+}
+
+.icon-con {
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+}
+
+
+.res-abt-sec .icon-link {
+    width: auto;
+    position: relative;
+}
+
+.res-abt-sec .icon-link:first-child {
+    margin-right: 20px;
+}
+
+.icon-link:after {
+    display: inline-block;
+    height: 20px;
+    width: auto;
+    content: attr(data-handle);
+    color: black;
+    margin-right: 15px;
+}
 
 .resume > .c2 {
     padding-top: 0;
@@ -110,5 +185,71 @@ body {
 }
 
 .p-page {
+}
+
+.exp-bar {
+    visibility: hidden;
+}
+
+.exp-bar:before {
+    background-color: white;
+}
+
+.exp-bar:after {
+    background-color: white;
+}
+
+.exp {
+    background-color: transparent;
+    color: black;
+    visibility: visible;
+}
+
+.exp:after {
+    display: inline-block;
+    position: static;
+    margin-left: 0px;
+    height: 15px;
+    content: "Intermediate";
+    -webkit-transform: translateY(-1em);
+    transform: translateY(-1.15em);
+}
+
+.exp-bar {
+    background-color: transparent;
+}
+
+.exp[data-val='2']::after {
+    width: 66.66%;
+    content: "Advanced";
+}
+
+.exp[data-val='3']::after {
+    width: 100%;
+    content: "Expert";
+}
+
+.resume > .c1 > .res-abt-sec:nth-child(4) {
+    -webkit-column-break-before: always;
     page-break-before: always;
+    break-before: always;
+}
+
+.resume > .c1 > .res-abt-sec:nth-child(4) > .title-side {
+    color: color: rgba(36, 123, 160, 1);
+    float: none;
+    margin-bottom: 15px;
+}
+
+.labels {
+    visibility: hidden;
+}
+
+.underline-div {
+    width: auto;
+    margin-bottom: 5px;
+}
+
+.years {
+    width: 100%;
 }

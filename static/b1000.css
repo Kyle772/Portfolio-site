@@ -19,3 +19,22 @@
     max-width: 32%;
     padding: 0;
 }
+
+/* resume page - language card */
+
+.language-con {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+
+.language-con > img {
+    -ms-flex-item-align: start;
+    align-self: flex-start;
+}
+
+.language-info {
+    width: 100%;
+    position: relative;
+}
