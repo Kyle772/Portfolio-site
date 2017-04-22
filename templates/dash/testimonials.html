@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="item-sel flex col">
+    {% for item in testimonials %}
+    <div class="flex row no-wrap col-1">
+        {{ item.image }}
+        {{ item.company }}
+        {{ item.name }}
+        {{ item.rating }}
+        {{ item.review }}
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -71,17 +71,44 @@ class Handler(webapp2.RequestHandler):
 
     def render(self, template, **kw):
         user = self.get_user()
-        self.debug("User: {}".format(user))
         if user:
             name = user.name
         else:
             name = ''
         navTab = self.get_navTab()
-        self.debug("{} {}".format(name, admins))
         self.write(self.render_str(template, user=user, navTab=navTab, name=name, admins=admins, **kw))
         
     def debug(self, text):
         logging.info(str(text))
+    
+    def admin_check(self, path=""):
+        """
+        Checks for admin and then 
+            -returns True/False
+            -renders path as html file if path exists
+            
+        depending on redir
+        """
+        try:
+            usr = self.get_user().name.lower()
+            if str(usr) in admins:
+                if path:
+                    self.render(path)
+                else: 
+                    return True
+            else:
+                self.debug("Not signed in as admin: {}".format(usr))
+                if path:
+                    self.redirect('/404')
+                else:
+                    return False
+        except:
+            if not usr:
+                self.debug("No user")
+            elif path:
+                self.redirect('/404')
+            else:
+                return None
     
     # -----
     # --Cookie Handling
@@ -109,7 +136,6 @@ class Handler(webapp2.RequestHandler):
     
     def get_navTab(self):
         s = str(self.request.path)
-        self.debug("navTab: {}".format(s))
         return s
 
     def login(self, user):
@@ -249,13 +275,15 @@ class ModalDB(db.Model):
     def render_txt(cls, text):
         return text.replace('\n', '<br>')
         
-class Card(db.Model):
+class TestimonialDB(db.Model):
+    image = db.StringProperty()
+    company = db.StringProperty()
     name = db.StringProperty()
-    time = db.IntegerProperty(default=1)
-    exp = db.IntegerProperty()
+    rating = db.IntegerProperty()
+    review = db.StringProperty()
+    created = db.DateTimeProperty(auto_now_add=True)
     
-    def render(self):
-        return self.render('language-card.html', card=self)
+    
     
 class NewModal(Handler):
     def get(self):
@@ -274,9 +302,7 @@ class NewModal(Handler):
         cat = self.request.get('cat')
         error = ""
         
-        self.debug("checking vars")
         if head and sub and main:
-            self.debug("head, sub, and main exist")
             m = ModalDB(images=images,
                         mainImage=mainImage,
                         head=head,
@@ -317,8 +343,6 @@ class EditModal(Handler):
         main = self.request.get('main')
         cat = self.request.get('cat')
         error = ""
-        
-        self.debug("checking vars")
         
         mkey = db.Key.from_path('ModalDB', int(port_id))
         m = db.get(mkey)
@@ -378,7 +402,6 @@ class SignUp(Handler):
         error = ''
 
         if password == vPassword:
-            self.debug("Passwords match")
             if user:
                 if User.by_name(user) or User.exist(user):
                     error = 'Username already exists. :('
@@ -482,7 +505,6 @@ class Portfolio(Handler):
     def getLinks(self, page_cat):
         page_cat = page_cat.lower()
         current = self.order.index(page_cat)
-        self.debug(current)
         prv = current - 1
         nxt = current + 1
         if nxt >= len(self.order):
@@ -494,7 +516,6 @@ class Portfolio(Handler):
     
     def get(self, page_cat="about"):
         current = self.getLinks(page_cat)
-        self.debug("page_Cat: " + page_cat)
         items = ""
         direction = self.request.get('dir')
         
@@ -502,10 +523,7 @@ class Portfolio(Handler):
             pass
         else:
             items = db.GqlQuery('select * from ModalDB where cat = :1', page_cat)
-        self.debug(items)
-                
-        self.debug(items)
-                
+
         self.render('portfolio.html', items=items, direction=direction, multipage=True, links=self.links, page=page_cat)
         
 class Pricing(Handler):
@@ -550,13 +568,10 @@ class Modal(Handler):
             
     
     def getLinks(self, home, port_id):
-        self.debug(home)
         items = db.GqlQuery('select * from ModalDB where cat = :1', home)
-        self.debug(items)
         
         self.order = self.popList(items)
 
-        self.debug(self.order)
         current = self.order.index(port_id)
         prv = current - 1
         nxt = current + 1
@@ -566,7 +581,6 @@ class Modal(Handler):
         self.links["prev"] = self.order[prv]
         self.links["current"] = self.order[current]
         
-        self.debug(self.links)
         return self.links["current"]
     
     def get(self, home, port_id):
@@ -577,7 +591,6 @@ class Modal(Handler):
         items = \
             db.GqlQuery('select * from ModalDB order by created desc limit 10'
                         )
-        self.debug(items)
         self.render('portfolio.html', home=home, direction=direction, multipage=True, links=self.links, port_id=int(port_id), modal=modal, items=items)
         
 class Contact(Handler):
@@ -604,12 +617,14 @@ class Contact(Handler):
 
 class Dashboard(Handler):
     def get(self):
-        try:
-            user = self.get_user().name.lower()
-            if user in admins:
-                self.render('dash.html')
-        except:
-            self.redirect('/404')
+        self.admin_check("dash.html")
+            
+class Testimonials(Handler):
+    def get(self):
+        if self.admin_check():
+            t = db.GqlQuery('select * from TestimonialDB order by submitted')
+            self.render("/dash/testimonials.html", testimonials=t)
+        
             
 app = webapp2.WSGIApplication([
     ('/', Portfolio),
@@ -621,6 +636,7 @@ app = webapp2.WSGIApplication([
     ('/success', Success),
     ('/resume', Resume),
     ('/dashboard', Dashboard),
+    ('/dashboard/testimonials', Testimonials),
     ('/portfolio/new', NewModal),
     ('/portfolio', Portfolio),
     ('/portfolio/([\w]+)/([0-9]+)', Modal),
