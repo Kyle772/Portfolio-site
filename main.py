@@ -604,10 +604,11 @@ class Contact(Handler):
 
 class Dashboard(Handler):
     def get(self):
-        user = self.get_user().name.lower()
-        if user in admins:
-            self.render('dash.html')
-        else: 
+        try:
+            user = self.get_user().name.lower()
+            if user in admins:
+                self.render('dash.html')
+        except:
             self.redirect('/404')
             
 app = webapp2.WSGIApplication([
