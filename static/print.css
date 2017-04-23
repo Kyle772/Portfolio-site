@@ -229,7 +229,7 @@ body {
     content: "Expert";
 }
 
-.resume > .c1 > .res-abt-sec:nth-child(4) {
+.p-page {
     -webkit-column-break-before: always;
     page-break-before: always;
     break-before: always;
@@ -239,6 +239,10 @@ body {
     color: color: rgba(36, 123, 160, 1);
     float: none;
     margin-bottom: 15px;
+}
+
+.p-hidden {
+    display: block;
 }
 
 .labels {
