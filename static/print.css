@@ -67,10 +67,12 @@ body {
     width: 100%;
     max-width: 100%;
     padding-top: 0;
-    padding-bottom: 15px;
-    -webkit-box-ordinal-group: 4;
-    -ms-flex-order: 3;
-    order: 3;
+    -webkit-box-ordinal-group: 1;
+    -ms-flex-order: 0;
+    order: 0;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    padding-bottom: 0;
 }
 
 .resume > .res-abt-sec:first-child {
@@ -135,6 +137,7 @@ body {
 .soft-icon {
     max-width: 35px;
     margin: 5px;
+    display: none;
 }
 
 .icon-con {
@@ -145,10 +148,18 @@ body {
 }
 
 .language-con {
-    width: 25%;
-    max-width: 25%;
-    height: 60px;
+    width: auto;
+    max-width: 40%;
+    min-height: 40px;
+    height: 40px;
     box-sizing: border-box;
+    padding: 0 10px 0 10px;
+    border-right: solid rgba(0,0,0,.25) 1px;
+    margin-bottom: 5px;
+}
+
+.language-con:last-child, .language-con:nth-child(4) {
+    border-right: 0;
 }
 
 .icon-con {
@@ -237,8 +248,13 @@ body {
 
 .resume > .c1 > .res-abt-sec:nth-child(4) > .title-side {
     color: color: rgba(36, 123, 160, 1);
-    float: none;
-    margin-bottom: 15px;
+    float: right;
+    margin-bottom: 0;
+    margin-top: -30px;
+}
+
+.resume > .c1 > .res-abt-sec:nth-child(4) > .underline-div {
+    padding-left: 10px;
 }
 
 .p-hidden {
@@ -254,6 +270,25 @@ body {
     margin-bottom: 5px;
 }
 
-.years {
-    width: 100%;
+.language-info > .head > .years {
+    width: auto;
+    margin-left: 5px;
 }
+
+.language-info > .head > .title {
+    width: auto;
+    flex-grow: 0;
+}
+
+.language-info {
+    padding-bottom: 15px;
+}
+
+.resume > .c1 > .res-abt-sec:nth-child(4) {
+    width: 70%;
+}
+
+.resume > .c1 > .res-abt-sec:nth-child(2) {
+    width: 29%;
+}
+

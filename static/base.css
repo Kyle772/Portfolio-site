@@ -38,6 +38,14 @@ body {
     background-color: rgba(50, 50, 56, 1);
 }
 
+.fr {
+    float: right;
+}
+
+.fl {
+    float: left;
+}
+
 .col-1 {
     width: 100%;
 }
