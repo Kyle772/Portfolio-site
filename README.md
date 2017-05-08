@@ -6,6 +6,8 @@ Current todo:<br>
     - Add admin dashboard for the unnamed CMS that I am building for the site. <br>
     - Fill in content and pages<br>
     - Add projects tab<br>
-    - build portfolio page for the hidden back-end features on the site
+    - build portfolio page for the hidden back-end features on the site<br>
+    - Add query for pricing page<br>
+    - Add css for cards on pricing page
 <br><br>
 Feel free to look around! Any feedback or comments can be directed to Contact@KyleDiggs.com
