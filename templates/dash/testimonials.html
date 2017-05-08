@@ -1,15 +1,75 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="item-sel flex col">
-    {% for item in testimonials %}
-    <div class="flex row no-wrap col-1">
-        {{ item.image }}
-        {{ item.company }}
-        {{ item.name }}
-        {{ item.rating }}
-        {{ item.review }}
-    </div>
+<div class="dash-t">
+    <h3>Testimonials</h3>
+    <p>{{ 'Editing Testimonial #{}'.format(TID) if 'edit' in navTab }}</p>
+    <form name="testimonial" class="testimonial-form flex wrap" method="post">
+        <p class="col-1">{{ error }}</p>
+        <div class="flex col no-wrap col-2 rp">
+            <label>
+                Name:
+                <input name="name" type="text" value="{{ name }}">
+            </label>
+            <label>
+                Company/project name:
+                <input name="company" type="text" value="{{ company }}">
+            </label>
+        </div>
+        <div class="flex col no-wrap col-2 lp">
+            <label>
+                Rating:
+                <input name="rating" type="number" min="0" max="5" value="{{ rating }}">
+            </label>
+            <label>
+                Link:
+                <input name="link" type="text" value="{{ link }}">
+            </label>
+        </div>
+        <div class="flex col no-wrap col-1">
+            <label>
+                Review body:
+                <textarea class="textarea-med" name="review" type="text">{{ review }}</textarea>
+            </label>
+            <div class="row col-4">
+                <label>
+                    Image:
+                    <input name="image" type="file">
+                </label>
+            </div>
+            <div class="row col-4">
+                <input class="t button" type="submit" value="Submit">
+                <label class="lp">
+                    Verified?:
+                    <input name="verified" type="checkbox" {{ 'checked' if verified == 'on' or verified == True}}>
+                </label>
+            </div>
+        </div>
+    </form>
+</div><br><br>
+<div class="item-sel flex col left-align">
+    <table class="col-1">
+        <tr>
+            <th>Edit</th>
+            <th>Image</th>
+            <th>Company</th>
+            <th>Name</th>
+            <th>Review</th>
+            <th>Rating</th>
+            <th>Verified</th>
+        </tr>
+        {% for item in testimonials %}
+        <tr data-key="{{ item.key().id() }}">
+            <td><a href="/dashboard/testimonials/edit/{{ item.key().id() }}">Edit</a></td>
+            <td>{{ item.image }}</td>   
+            <td>{{ item.company }}</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.review }}</td>
+            <td>{{ item.rating }}</td>
+            <td>{{ item.verified }}</td>
+        </tr>
     {% endfor %}
+    </table>
+    
 </div>
 {% endblock %}

@@ -82,7 +82,7 @@
         {% endblock %}
     </div>
     <footer class="footer constrain">
-        {% if name.lower() in admins %}
+        {% if username.lower() in admins %}
             <a href="/logout">Logout</a>
             <a class="{{ 'active' if 'dashboard' in navTab }}" href="/dashboard">Dashboard</a>
         {% elif user %}

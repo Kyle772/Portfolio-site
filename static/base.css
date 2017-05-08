@@ -70,6 +70,10 @@ body {
     width: 16.6%;
 }
 
+.col-7 {
+    width: 14.28%
+}
+
 .lp {
     box-sizing: border-box;
     padding-left: 15px;
@@ -285,7 +289,8 @@ h5.title-side {
 
 input[type=text],
 input[type=email],
-input[type=password] {
+input[type=password],
+input[type=number] {
     outline: none;
     border: none;
     border-bottom: 2px solid #586c70;
@@ -478,6 +483,7 @@ body {
     color: white;
     box-sizing: border-box;
     z-index: 1;
+    padding-bottom: 75px;
 }
 
 .intro > img {
@@ -1386,4 +1392,25 @@ input[type=submit] {
 
 .dash-but:hover {
     background-color: rgba(255, 255, 255, .99);
+}
+
+/* Testimonial Dashboard */
+.dash-t > .testimonial-form {
+    position: relative;
+    width: 100%;
+}
+
+.dash-t > .testimonial-form > div > label {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+
+.dash-t > .testimonial-form input[type="checkbox"] {
+    -webkit-transform: translateY(2px);
+    transform: translateY(2px);
 }

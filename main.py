@@ -48,7 +48,7 @@ actions = {'li': 'logged in',
            'su': 'registering',
            'dl': 'deleted an item',
            'em': 'sent an email',
-           't': 'leaving a review'}
+           't': 'left a review'}
 
 # ---------------------/
 # --Global Functions--/
@@ -72,11 +72,11 @@ class Handler(webapp2.RequestHandler):
     def render(self, template, **kw):
         user = self.get_user()
         if user:
-            name = user.name
+            username = user.name
         else:
-            name = ''
+            username = ''
         navTab = self.get_navTab()
-        self.write(self.render_str(template, user=user, navTab=navTab, name=name, admins=admins, **kw))
+        self.write(self.render_str(template, user=user, navTab=navTab, username=username, admins=admins, **kw))
         
     def debug(self, text):
         logging.info(str(text))
@@ -89,6 +89,7 @@ class Handler(webapp2.RequestHandler):
             
         depending on redir
         """
+        usr = ''
         try:
             usr = self.get_user().name.lower()
             if str(usr) in admins:
@@ -281,7 +282,16 @@ class TestimonialDB(db.Model):
     name = db.StringProperty()
     rating = db.IntegerProperty()
     review = db.StringProperty()
+    link = db.StringProperty()
+    verified = db.BooleanProperty()
     created = db.DateTimeProperty(auto_now_add=True)
+    
+    @classmethod
+    def by_id(cls, uid):
+        if uid:
+            return cls.get_by_id(int(uid))
+        else:
+            return None
     
     
     
@@ -620,10 +630,79 @@ class Dashboard(Handler):
         self.admin_check("dash.html")
             
 class Testimonials(Handler):
-    def get(self):
+    def get(self, TID=''):
         if self.admin_check():
-            t = db.GqlQuery('select * from TestimonialDB order by submitted')
-            self.render("/dash/testimonials.html", testimonials=t)
+            t = db.GqlQuery('select * from TestimonialDB order by created desc')
+            if not TID == '':
+                ts = TestimonialDB.by_id(TID)
+                self.debug("Verified?: {}".format(ts.verified))
+                self.render("/dash/testimonials.html", TID=TID,
+                        image=ts.image, company=ts.company, name=ts.name,
+                        rating=ts.rating, review=ts.review, link=ts.link,
+                        verified=ts.verified, testimonials=t)
+            else:
+                self.render("/dash/testimonials.html", testimonials=t)
+        else:
+            self.redirect("/404")
+        
+    def post(self, TID=''):
+        image = self.request.get("image")
+        company = self.request.get("company")
+        name = self.request.get("name")
+        rating = int(self.request.get("rating"))
+        review = self.request.get("review")
+        link = self.request.get("link")
+        verified = self.request.get("verified")
+        
+        if self.admin_check():
+            pass
+        else:
+            self.redirect("/404")
+            
+        
+        if verified == "on":
+            verified = True
+        else:
+            verified = False
+        
+        if not TID == '':
+            #Editing
+            if company and name and rating and review:
+                ts = TestimonialDB.by_id(TID)
+                if image:
+                    ts.image = image
+                ts.company = company
+                ts.name = name
+                ts.rating = rating
+                ts.review = review
+                ts.link = link
+                self.debug("Verified?: {}".format(verified))
+                ts.verified = verified
+                ts.put()
+                
+                self.redirect('/success?action=t&message=ts')
+            else:
+                #Error 
+                error="You're missing one of the required sections!"
+                self.render("/dash/testimonials.html",
+                            image=image, company=company, name=name,
+                            rating=rating, review=review, link=link,
+                            error=error)
+        elif image and company and name and rating and review:
+            #Placing
+            ts = TestimonialDB(image=image, company=company, name=name,
+                              rating=rating, review=review, link=link,
+                              verified=verified)
+            ts.put()
+            self.redirect('/success?action=t&message=ts')
+        else:
+            #Error
+            error="You're missing one of the required sections!"
+            self.render("/dash/testimonials.html",
+                        image=image, company=company, name=name,
+                        rating=rating, review=review, link=link,
+                        error=error)
+            
         
             
 app = webapp2.WSGIApplication([
@@ -637,6 +716,7 @@ app = webapp2.WSGIApplication([
     ('/resume', Resume),
     ('/dashboard', Dashboard),
     ('/dashboard/testimonials', Testimonials),
+    ('/dashboard/testimonials/edit/([0-9]+)', Testimonials),
     ('/portfolio/new', NewModal),
     ('/portfolio', Portfolio),
     ('/portfolio/([\w]+)/([0-9]+)', Modal),
