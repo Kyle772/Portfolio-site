@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dash-b">
+    <h3><a class="no-link" href="/dashboard">Dashboard</a> > Blogs</h3>
+    <p>{{ 'Editing Blog #{}'.format(BID) if 'edit' in navTab }}</p>
+    <form name="blog" class="blog-form flex col wrap" method="post">
+        <p class="col-1">{{ error }}</p>
+        <div class="flex row no-wrap col-1">
+            <label class="col-2">
+                Title:
+                <input name="title" type="text" value="{{ title }}">
+            </label>
+            <label class="col-2">
+                Project Category:
+                <select name="project_cat">
+                    {% for project in projects %}
+                        <option>project.name</option>
+                    {% endfor %}
+                </select>
+            </label>
+        </div>
+        <div class="row col-1">
+            <label>
+                Image:
+                <input name="image" type="file">
+            </label>
+        </div>
+        <div class="col col-1">
+            <label>
+                Body:
+                <textarea class="textarea-tall col-1" name="content" type="text">{{ content }}</textarea>
+            </label>
+            <br>
+            <label>
+                Aside:
+                <textarea class="textarea-med col-1" name="aside" type="text">{{ aside }}</textarea>
+            </label>
+            <br>
+            <div class="row col-4">
+                <input class="t button" type="submit" value="Submit">
+            </div>
+            <br>
+        </div>
+    </form>
+</div><br><br>
+<div class="item-sel flex col left-align">
+    <table class="query-table col-1">
+        <tr>
+            <th>Edit</th>
+            <th>Image</th>
+            <th>Title</th>
+            <th>Content</th>
+            <th>Aside</th>
+            <th>Project Cat</th>
+        </tr>
+        {% for item in blogs %}
+        <tr data-key="{{ item.key().id() }}">
+            <td><a href="/dashboard/blog/edit/{{ item.key().id() }}">Edit</a></td>
+            <td>{{ 'True' if item.image else 'False' }}</td>
+            <td>{{ item.title }}</td>
+            <td>{{ item.content }}</td>
+            <td>{{ item.aside }}</td>
+            <td>{{ item.project_cat }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+    
+</div>
+{% endblock %}

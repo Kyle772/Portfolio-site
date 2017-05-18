@@ -293,7 +293,20 @@ class TestimonialDB(db.Model):
         else:
             return None
     
+class BlogDB(db.Model):
+    image = db.StringProperty()
+    content = db.StringProperty(multiline=True)
+    aside = db.StringProperty(multiline=True)
+    title = db.StringProperty()
+    project_cat = db.StringProperty()
+    created = db.DateTimeProperty(auto_now_add=True)
     
+    @classmethod
+    def by_id(cls, uid):
+        if uid:
+            return cls.get_by_id(int(uid))
+        else:
+            return None
     
 class NewModal(Handler):
     def get(self):
@@ -612,7 +625,7 @@ class Modal(Handler):
         items = \
             db.GqlQuery('select * from ModalDB order by created desc limit 10'
                         )
-        self.render('portfolio.html', home=home, direction=direction, multipage=True, links=self.links, port_id=int(port_id), modal=modal, items=items)
+        self.render('portfolio.html', home=home, direction=direction, multipage=True, links=self.links, port_id=int(port_id), modal=modal, items=items, admin=self.admin_check())
         
 class Contact(Handler):
     def get(self):
@@ -639,6 +652,55 @@ class Contact(Handler):
 class Dashboard(Handler):
     def get(self):
         self.admin_check("dash.html")
+        
+class Blog(Handler):
+    def get(self, BID=""):
+        navTab = self.get_navTab()
+        if navTab == "/dashboard/blog" and self.admin_check():
+            bq = db.GqlQuery('select * from BlogDB order by created desc')
+            self.render("/dash/blog.html", blogs=bq)
+        elif BID and self.admin_check():
+            bq = db.GqlQuery('select * from BlogDB order by created desc')
+            
+            b = BlogDB.by_id(BID)
+            self.render("/dash/blog.html", blogs=bq, title=b.title, content=b.content, aside=b.aside, BID=BID)
+        else:
+            self.render("blog.html")
+            
+    def post(self, BID=""):
+        navTab = self.get_navTab()
+        if "/dashboard/blog" in navTab and self.admin_check():
+            title = self.request.get("title")
+            project_cat = self.request.get("project_cat")
+            image = self.request.get("image")
+            content = self.request.get("content")
+            aside = self.request.get("aside")
+            
+            if BID and self.admin_check():
+                b = BlogDB.by_id(BID)
+                if image:
+                    b.image = image;
+                if project_cat:
+                    b.project_cat = project_cat
+                b.title = title
+                b.content = content
+                b.aside = aside
+                b.put()
+            else:
+                b = BlogDB()
+                if image:
+                    b.image = image;
+                if project_cat:
+                    b.project_cat = project_cat
+                b.title = title
+                b.content = content
+                b.aside = aside
+                b.put()
+            
+            self.redirect("/dashboard/blog")
+            
+        else:
+            self.redirect("/404")
             
 class Testimonials(Handler):
     def get(self, TID=''):
@@ -725,9 +787,12 @@ app = webapp2.WSGIApplication([
     ('/register', SignUp),
     ('/success', Success),
     ('/resume', Resume),
+    ('/blog', Blog),
     ('/dashboard', Dashboard),
     ('/dashboard/testimonials', Testimonials),
     ('/dashboard/testimonials/edit/([0-9]+)', Testimonials),
+    ('/dashboard/blog', Blog),
+    ('/dashboard/blog/edit/([0-9]+)', Blog),
     ('/portfolio/new', NewModal),
     ('/portfolio', Portfolio),
     ('/portfolio/([\w]+)/([0-9]+)', Modal),

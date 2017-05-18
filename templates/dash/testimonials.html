@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="dash-t">
-    <h3>Testimonials</h3>
+    <h3><a class="no-link" href="/dashboard">Dashboard</a> > Testimonials</h3>
     <p>{{ 'Editing Testimonial #{}'.format(TID) if 'edit' in navTab }}</p>
     <form name="testimonial" class="testimonial-form flex wrap" method="post">
         <p class="col-1">{{ error }}</p>
@@ -46,6 +46,7 @@
             </div>
         </div>
     </form>
+    <br>
 </div><br><br>
 <div class="item-sel flex col left-align">
     <table class="query-table col-1">

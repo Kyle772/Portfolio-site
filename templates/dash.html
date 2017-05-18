@@ -3,7 +3,7 @@
 {% block content %}
 <div class="dash col-1">
     <h1>Admin Dashboard</h1>
-    <p>Welcome back, {{ name }}!</p>
+    <p>Welcome back, {{ user.name }}!</p>
     <p>What would you like to do today?</p>
     <br>
     <div class="flex row wrap spc-btwn">
@@ -18,10 +18,6 @@
         <a class="t dash-but flex col" href="/dashboard/portfolio">
             <img src="/icons/LilPapers21.svg">
             Portfolio
-        </a>
-        <a class="t dash-but flex col" href="/dashboard/resume">
-            <img src="/icons/LilPapers21.svg">
-            Resume
         </a>
     </div>
 </div>
