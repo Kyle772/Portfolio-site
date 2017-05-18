@@ -281,7 +281,7 @@ class TestimonialDB(db.Model):
     company = db.StringProperty()
     name = db.StringProperty()
     rating = db.IntegerProperty()
-    review = db.StringProperty()
+    review = db.StringProperty(multiline=True)
     link = db.StringProperty()
     verified = db.BooleanProperty()
     created = db.DateTimeProperty(auto_now_add=True)
@@ -538,7 +538,8 @@ class Portfolio(Handler):
         
 class Pricing(Handler):
     def get(self):
-        self.render('pricing.html')
+        t = db.GqlQuery('select * from TestimonialDB order by created desc')
+        self.render('pricing.html', testimonials=t)
         
     def post(self):
         name = self.request.get('name')
@@ -549,7 +550,7 @@ class Pricing(Handler):
         sender_address = "Contact-form@website-157906.appspotmail.com"
         subj = "Testimonial Inbound!"
         
-        content = str("{}\n{}\n{}\n{}\n\n{}").format(name, return_address, project, rating, body) 
+        content = str("{}\n{}\n{}\n{}\n\n{}").format(name, return_address, project, rating, body)   
         
         if name and body and rating and project and return_address:
             mail.send_mail(sender=sender_address,

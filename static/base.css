@@ -1257,6 +1257,21 @@ input[type=submit] {
     overflow: auto;
 }
 
+.test-con {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: rgba(0, 0, 0, .25);
+}
+
+.test-con .image {
+    align-self: flex-start;
+    margin-right: 15px;
+    min-width: 200px;
+}
+
+.test-con h3 {
+    margin-top: 0;
+}
 
 /* Contact Page */
 
