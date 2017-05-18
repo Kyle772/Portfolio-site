@@ -208,6 +208,11 @@ a.no-link {
     cursor: pointer;
 }
 
+
+h3 + p.title-info {
+    margin-top: 0;
+}
+
 .info .cta {
     margin-top: 0px;
 }
@@ -1488,4 +1493,26 @@ a.review-con {
     float: right;
     margin-left: 15px;
     padding: 5px;
+}
+
+/* Blog */
+.blog-con .blog {
+    margin-bottom: 30px;
+    padding-bottom: 45px;
+    padding-top: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, .2);
+}
+
+.blog-con .content {
+    width: 100%;
+    flex-shrink: 1;
+}
+
+.blog-con .aside {
+    min-width: 200px;
+    width: 25%;
+}
+
+.blog-con .image {
+    max-height: 200px;
 }

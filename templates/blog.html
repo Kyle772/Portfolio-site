@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="blog-con">
+{% for blog in blogs %}
+    <div class="blog flex col col-1">
+        {% if blog.image != None %}
+        <img class="image col-1" src="{{ blog.image }}">
+        {% endif %}
+        <h3>{{ blog.project_cat + ' - ' if blog.project_cat != '' }}{{ blog.title }}</h3>
+        <p class="title-info">Kyle Diggs - {{ blog.created.strftime('%m-%d-%Y') }}</p>
+        <div class="flex row">
+            <div class="content">{{ blog.content }}</div>
+            <div class="aside">{{ blog.aside }}</div>
+        </div>
+    </div>
+{% endfor %}
+</div>
+{% endblock %}

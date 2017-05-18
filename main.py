@@ -665,7 +665,8 @@ class Blog(Handler):
             b = BlogDB.by_id(BID)
             self.render("/dash/blog.html", blogs=bq, title=b.title, content=b.content, aside=b.aside, BID=BID)
         else:
-            self.render("blog.html")
+            bq = db.GqlQuery('select * from BlogDB order by created desc')
+            self.render("blog.html", blogs=bq)
             
     def post(self, BID=""):
         navTab = self.get_navTab()
