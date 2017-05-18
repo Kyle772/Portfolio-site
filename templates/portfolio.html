@@ -46,7 +46,7 @@
             </div>
             <div class="flex row no-wrap port-buttons">
                 <a class="cta t title-side" href="/portfolio/{{home}}?dir=up">X</a>
-                {% if user %}
+                {% if admin %}
                     <a class="cta t title-side" href="{{port_id}}/delete">Delete</a>
                     <a class="cta t title-side" href="{{port_id}}/edit">Edit</a>
                 {% endif %}
@@ -76,7 +76,7 @@
 </div>
 {% elif "logo" in page %}
 <div class="title">
-    {% if user %}
+    {% if admin %}
         <a class="cta title-side" href="/portfolio/new">New</a>
     {% endif %}
     <h3>Logos</h3>
@@ -90,7 +90,7 @@
 </div>
 {% elif "web" in page %}
 <div class="title">
-    {% if user %}
+    {% if admin %}
         <a class="cta title-side" href="/portfolio/new">New</a>
     {% endif %}
     <h3>Websites</h3>
@@ -104,7 +104,7 @@
 </div>
 {% elif "print" in page %}
 <div class="title">
-    {% if user %}
+    {% if admin %}
         <a class="cta title-side" href="/portfolio/new">New</a>
     {% endif %}
     <h3>Print Work</h3>
@@ -118,7 +118,7 @@
 </div>
 {% elif "graphics" in page %}
 <div class="title">
-    {% if user %}
+    {% if admin %}
         <a class="cta title-side" href="/portfolio/new">New</a>
     {% endif %}
     <h3>Graphics</h3>

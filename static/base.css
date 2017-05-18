@@ -1258,9 +1258,17 @@ input[type=submit] {
 }
 
 .test-con {
-    margin-top: 15px;
+    position: relative;
+    margin-top: 30px;
     padding: 15px;
     background-color: rgba(0, 0, 0, .25);
+    border: 5px solid transparent;
+    box-sizing: border-box;
+}
+
+a .test-con:hover {
+    background-color: rgba(0, 0, 0, .15);
+    border: 5px solid black;
 }
 
 .test-con .image {
@@ -1272,8 +1280,12 @@ input[type=submit] {
     min-height: 200px;
 }
 
-.test-con h3 {
+.test-con[data-verified="True"] h3 {
     margin-top: 0;
+}
+
+.test-con h3 {
+    margin-top: 10px;
 }
 
 /* Contact Page */
@@ -1443,4 +1455,32 @@ input[type=submit] {
     border-bottom: 1px solid rgba(255, 255, 255, .2);
     padding-bottom: 15px;
     padding-top: 15px;
+}
+
+.review-con {
+    color: white;
+}
+
+a.review-con {
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+}
+
+.testimonial-con .info-con {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    width: 100%;
+}
+
+.info-tag {
+    border: 2px solid white;
+    border-radius: 5px;
+    color: white;
+    font-weight: 700;
+    text-align: center;
+    float: right;
+    margin-left: 15px;
+    padding: 5px;
 }

@@ -108,14 +108,32 @@
     <h3>Testimonials</h3>
     <p>The comprehensive list shown below shows every verified review; good or bad. Press the arrow to the right to toggle the Testimonial form if you'd like to leave a review! Any reviews will be rewarded with a discount code for future orders!</p>
     {% for item in testimonials %}
-    <div data-verified="{{ item.verified }}" class="test-con flex row algn-cntr">
-        <img class="image" src="/images/{{ item.image }}">
-        <a href="{{ item.link }}" class="review-con">
-            <h3>{{ item.company }}</h3>
-            <p>"{{ item.review }}"</p>
-            <p>- {{ item.name }} - {{ item.rating }}/5</p>
-        </a>
-    </div>
+    {% if item.link %}
+    <a class="review-con" href="{{ item.link }}"> 
+    {% endif %}
+        <div data-verified="{{ item.verified }}" class="test-con t flex row algn-cntr">
+            {% if item.image %}
+            <img class="image" src="/images/{{ item.image }}">
+            {% endif %}
+            <div class="review-con">
+                <div class="info-con">
+                    {% if item.verified %}
+                    <div class="info-tag">Verified</div>
+                    {% else %}
+                    <div class="info-tag">Pending Review</div>
+                    {% endif %}
+                    {% if item.link %}
+                    <div class="info-tag">Portfolio Link</div>
+                    {% endif %}
+                </div>
+                <h3>{{ item.company }}</h3>
+                <p>"{{ item.review }}"</p>
+                <p>- {{ item.name }} - {{ item.rating }}/5</p>
+            </div>
+        </div>
+    {% if item.link %}
+    </a>
+    {% endif %}
     {% endfor %}
 </div>
 {% endblock %}

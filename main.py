@@ -534,7 +534,7 @@ class Portfolio(Handler):
         else:
             items = db.GqlQuery('select * from ModalDB where cat = :1', page_cat)
 
-        self.render('portfolio.html', items=items, direction=direction, multipage=True, links=self.links, page=page_cat)
+        self.render('portfolio.html', items=items, direction=direction, multipage=True, links=self.links, page=page_cat, admin=self.admin_check())
         
 class Pricing(Handler):
     def get(self):
@@ -543,7 +543,7 @@ class Pricing(Handler):
         
     def post(self):
         name = self.request.get('name')
-        rating = self.request.get('rating')
+        rating = int(self.request.get('rating'))
         body = self.request.get('body')
         project = self.request.get('project')
         return_address = self.request.get('email')
@@ -557,7 +557,17 @@ class Pricing(Handler):
                        to="Contact@KyleDiggs.com",
                        subject=subj,
                        body=content)
-            self.redirect('/thanks?action=su&message=ts')
+            
+            ts = TestimonialDB()
+            ts.company = project
+            ts.name = name
+            ts.rating = rating
+            ts.review = body
+            ts.link = ""
+            ts.verified = False
+            ts.put()
+            
+            self.redirect('/thanks?action=t&message=ts')
         else: 
             error="It looks like you didn't fill out one of the sections!"
             self.render('pricing.html', error=error, name=name, rating=rating, body=body, project=project, email=return_address)
