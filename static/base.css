@@ -1433,10 +1433,14 @@ input[type=submit] {
     transform: translateY(2px);
 }
 
-.query-table {
+.query-table tbody {
     vertical-align: top;
 }
 
-.query-table tr {
+.query-table tr, .query-table td {
     max-height: 150px;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(255, 255, 255, .2);
+    padding-bottom: 15px;
+    padding-top: 15px;
 }

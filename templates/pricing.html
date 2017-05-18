@@ -110,12 +110,11 @@
     {% for item in testimonials %}
     <div data-verified="{{ item.verified }}" class="test-con flex row algn-cntr">
         <img class="image" src="/images/{{ item.image }}">
-        <div class="review-con">
+        <a href="{{ item.link }}" class="review-con">
             <h3>{{ item.company }}</h3>
-            <p>{{ item.rating }}/5</p>
             <p>"{{ item.review }}"</p>
-            <p>- {{ item.name }}</p>
-        </div>
+            <p>- {{ item.name }} - {{ item.rating }}/5</p>
+        </a>
     </div>
     {% endfor %}
 </div>
