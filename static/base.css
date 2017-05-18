@@ -1266,7 +1266,10 @@ input[type=submit] {
 .test-con .image {
     align-self: flex-start;
     margin-right: 15px;
+    width: 200px;
     min-width: 200px;
+    height: 200px;
+    min-height: 200px;
 }
 
 .test-con h3 {
@@ -1428,4 +1431,12 @@ input[type=submit] {
 .dash-t > .testimonial-form input[type="checkbox"] {
     -webkit-transform: translateY(2px);
     transform: translateY(2px);
+}
+
+.query-table {
+    vertical-align: top;
+}
+
+.query-table tr {
+    max-height: 150px;
 }
