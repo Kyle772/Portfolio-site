@@ -295,10 +295,10 @@ class TestimonialDB(db.Model):
     
 class BlogDB(db.Model):
     image = db.StringProperty()
-    content = db.StringProperty(multiline=True)
-    aside = db.StringProperty(multiline=True)
+    content = db.TextProperty()
+    aside = db.TextProperty()
     title = db.StringProperty()
-    project_cat = db.StringProperty()
+    project_cat = db.StringProperty(default="")
     created = db.DateTimeProperty(auto_now_add=True)
     
     @classmethod
@@ -659,11 +659,14 @@ class Blog(Handler):
         if navTab == "/dashboard/blog" and self.admin_check():
             bq = db.GqlQuery('select * from BlogDB order by created desc')
             self.render("/dash/blog.html", blogs=bq)
-        elif BID and self.admin_check():
+        elif "/edit/" in navTab and BID and self.admin_check():
             bq = db.GqlQuery('select * from BlogDB order by created desc')
             
             b = BlogDB.by_id(BID)
             self.render("/dash/blog.html", blogs=bq, title=b.title, content=b.content, aside=b.aside, BID=BID)
+        elif BID:
+            bq = db.GqlQuery("select * from BlogDB where __key__ = KEY('BlogDB', {}) order by created desc".format(BID))
+            self.render("blog.html", blogs=bq)
         else:
             bq = db.GqlQuery('select * from BlogDB order by created desc')
             self.render("blog.html", blogs=bq)
@@ -794,6 +797,7 @@ app = webapp2.WSGIApplication([
     ('/dashboard/testimonials/edit/([0-9]+)', Testimonials),
     ('/dashboard/blog', Blog),
     ('/dashboard/blog/edit/([0-9]+)', Blog),
+    ('/blog/([0-9]+)', Blog),
     ('/portfolio/new', NewModal),
     ('/portfolio', Portfolio),
     ('/portfolio/([\w]+)/([0-9]+)', Modal),

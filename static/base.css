@@ -1500,17 +1500,23 @@ a.review-con {
     margin-bottom: 30px;
     padding-bottom: 45px;
     padding-top: 15px;
-    border-bottom: 1px solid rgba(255, 255, 255, .2);
+    border-bottom: 1px solid rgba(255, 255, 255, .1);
+}
+
+.blog-con .blog:last-of-type {
+    border-bottom: 0px solid rgba(255, 255, 255, .1);
 }
 
 .blog-con .content {
     width: 100%;
     flex-shrink: 1;
+    padding: 0 30px 0 0;
 }
 
 .blog-con .aside {
     min-width: 200px;
-    width: 25%;
+    width: 33%;
+    flex-shrink: 0;
 }
 
 .blog-con .image {

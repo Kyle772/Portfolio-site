@@ -14,6 +14,7 @@
             <label class="col-2">
                 Project Category:
                 <select name="project_cat">
+                    <option selected="selected">None</option>
                     {% for project in projects %}
                         <option>project.name</option>
                     {% endfor %}
