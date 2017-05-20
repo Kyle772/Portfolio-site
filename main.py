@@ -666,10 +666,12 @@ class Blog(Handler):
             self.render("/dash/blog.html", blogs=bq, title=b.title, content=b.content, aside=b.aside, BID=BID)
         elif BID:
             bq = db.GqlQuery("select * from BlogDB where __key__ = KEY('BlogDB', {}) order by created desc".format(BID))
-            self.render("blog.html", blogs=bq)
+            subscribed = self.read_cookie("subscribed")
+            self.render("blog.html", blogs=bq, subscribed=subscribed)
         else:
             bq = db.GqlQuery('select * from BlogDB order by created desc')
-            self.render("blog.html", blogs=bq)
+            subscribed = self.read_cookie("subscribed")
+            self.render("blog.html", blogs=bq, subscribed=subscribed)
             
     def post(self, BID=""):
         navTab = self.get_navTab()
@@ -702,6 +704,17 @@ class Blog(Handler):
                 b.put()
             
             self.redirect("/dashboard/blog")
+        elif "/blog" in navTab and self.request.get("email"):
+            return_address = self.request.get('email')
+            sender_address = "Contact-form@website-157906.appspotmail.com"
+
+            if return_address:
+                mail.send_mail(sender=sender_address,
+                           to="newblogsub.wpzus@zapiermail.com",
+                           subject=return_address,
+                           body=return_address)
+                
+            self.redirect(navTab)
             
         else:
             self.redirect("/404")

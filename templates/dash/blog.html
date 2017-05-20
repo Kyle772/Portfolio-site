@@ -60,8 +60,8 @@
             <td><a href="/dashboard/blog/edit/{{ item.key().id() }}">Edit</a></td>
             <td>{{ 'True' if item.image else 'False' }}</td>
             <td>{{ item.title }}</td>
-            <td>{{ item.content }}</td>
-            <td>{{ item.aside }}</td>
+            <td>{{ item.content[0:150] }}</td>
+            <td>{{ item.aside[0:150] }}</td>
             <td>{{ item.project_cat }}</td>
         </tr>
     {% endfor %}

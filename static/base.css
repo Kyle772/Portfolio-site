@@ -1517,8 +1517,32 @@ a.review-con {
     min-width: 200px;
     width: 33%;
     flex-shrink: 0;
+    align-self: flex-start;
+    padding: 0 15px 15px 15px;
+    background-color: rgba(255, 255, 255, .05);
+}
+
+.blog-con .aside .whiteback {
+    padding-top: 15px;
+    padding-bottom: 15px;
 }
 
 .blog-con .image {
     max-height: 200px;
+}
+
+.blog-sub {
+    background-color: #247ba0;
+    margin-left: -15px;
+    margin-right: -15px;
+    width: calc(100% + 30px);
+    box-shadow: inset 0px 1px 5px #040404;
+}
+
+.blog-sub-con {
+    display: none;
+}
+
+.blog-con  > .blog:first-of-type .blog-sub-con {
+    display: block;
 }

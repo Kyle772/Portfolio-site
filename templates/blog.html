@@ -11,9 +11,22 @@
             <h3>{% if blog.project_cat != 'None' %}{{ blog.project_cat }} - {% endif %}{{ blog.title }}</h3>
         </a>
         <p class="title-info">Kyle Diggs - {{ blog.created.strftime('%m-%d-%Y') }}</p>
-        <div class="flex row">
+        <div class="blog-body flex row">
             <div class="content">{{ blog.content | safe }}</div>
-            <div class="aside">{{ blog.aside | safe }}</div>
+            <div class="aside">{{ blog.aside | safe }}
+                <div class="blog-sub-con">
+                    <h4>Subscribe!</h4>
+                    <p>If you want to keep up to date with my blog posts fill out this form below!</p>
+                    <br>
+                    <form class="blog-sub col-1 flex col j-cntr algn-cntr" name="blog-sub" method="post">
+                        <label class="flex col col-1 j-cntr algn-cntr">
+                            <p>Email Address:</p>
+                            <input name="email" type="email">
+                        <label>
+                        <input class="button t" type="submit" value="Submit"><br><br>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 {% endfor %}

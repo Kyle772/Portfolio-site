@@ -293,3 +293,15 @@
     width: 100%;
     max-width: 100%;
 }
+
+/* Blog */
+.blog-con .blog-body {
+    flex-direction: column;
+}
+
+.blog-con .aside {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 15px;
+    margin-top: 30px;
+}
