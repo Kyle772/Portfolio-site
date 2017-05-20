@@ -2,34 +2,41 @@
 
 {% block content %}
 <div class="dash-t">
-    <h3><a class="no-link" href="/dashboard">Dashboard</a> > Testimonials</h3>
-    <p>{{ 'Editing Testimonial #{}'.format(TID) if 'edit' in navTab }}</p>
+    <h3>
+        <a class="no-link" href="/dashboard">Dashboard</a> > 
+        <a class="no-link" href="/dashboard/testimonials">Testimonials</a>{{ ' > ' if tst }}
+        <a class="no-link" href="/pricing#{{ TID }}">{{ tst.name if tst }}</a>
+    </h3>
+    <p>
+        {{ 'Editing Testimonial #{}'.format(TID) if 'edit' in navTab }}
+        {{ 'Delete Testimonial #{}?'.format(TID) if 'delete' in navTab }}
+    </p>
     <form name="testimonial" class="testimonial-form flex wrap" method="post">
         <p class="col-1">{{ error }}</p>
         <div class="flex col no-wrap col-2 rp">
             <label>
                 Name:
-                <input name="name" type="text" value="{{ name }}">
+                <input name="name" type="text" value="{{ tst.name if tst }}">
             </label>
             <label>
                 Company/project name:
-                <input name="company" type="text" value="{{ company }}">
+                <input name="company" type="text" value="{{ tst.company if tst }}">
             </label>
         </div>
         <div class="flex col no-wrap col-2 lp">
             <label>
                 Rating:
-                <input name="rating" type="number" min="0" max="5" value="{{ rating }}">
+                <input name="rating" type="number" min="0" max="5" value="{{ tst.rating if tst }}">
             </label>
             <label>
                 Link:
-                <input name="link" type="text" value="{{ link }}">
+                <input name="link" type="text" value="{{ tst.link if tst }}">
             </label>
         </div>
         <div class="flex col no-wrap col-1">
             <label>
                 Review body:
-                <textarea class="textarea-med" name="review" type="text">{{ review }}</textarea>
+                <textarea class="textarea-med" name="review" type="text">{{ tst.review if tst }}</textarea>
             </label>
             <div class="row col-4">
                 <label>
@@ -38,10 +45,10 @@
                 </label>
             </div>
             <div class="row col-4">
-                <input class="t button" type="submit" value="Submit">
+                <input class="t button" type="submit" value="{{ 'Delete' if '/delete' in navTab else 'Submit' }}">
                 <label class="lp">
                     Verified?:
-                    <input name="verified" type="checkbox" {{ 'checked' if verified == 'on' or verified == True}}>
+                    <input name="verified" type="checkbox" {{ 'checked' if tst.verified == 'on' or tst.verified == True if tst }}>
                 </label>
             </div>
         </div>
@@ -52,6 +59,7 @@
     <table class="query-table col-1">
         <tr>
             <th>Edit</th>
+            <th>Delete</th>
             <th>Image</th>
             <th>Company</th>
             <th>Name</th>
@@ -62,6 +70,7 @@
         {% for item in testimonials %}
         <tr data-key="{{ item.key().id() }}">
             <td><a href="/dashboard/testimonials/edit/{{ item.key().id() }}">Edit</a></td>
+            <td><a href="/dashboard/testimonials/delete/{{ item.key().id() }}">Delete</a></td>
             <td>{{ item.image }}</td>   
             <td>{{ item.company }}</td>
             <td>{{ item.name }}</td>

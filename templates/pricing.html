@@ -108,32 +108,38 @@
     <h3>Testimonials</h3>
     <p>The comprehensive list shown below shows every verified review; good or bad. Press the arrow to the right to toggle the Testimonial form if you'd like to leave a review! Any reviews will be rewarded with a discount code for future orders!</p>
     {% for item in testimonials %}
-    {% if item.link %}
-    <a class="review-con" href="{{ item.link }}"> 
-    {% endif %}
-        <div data-verified="{{ item.verified }}" class="test-con t flex row algn-cntr">
-            {% if item.image %}
-            <img class="image whiteback" src="/images/{{ item.image }}">
-            {% endif %}
-            <div class="review-con">
-                <div class="info-con">
-                    {% if item.verified %}
-                    <div class="info-tag">Verified</div>
-                    {% else %}
-                    <div class="info-tag">Pending Review</div>
+        {% if item.link %}
+        <a id="{{ item.key().id() }}" class="review-con" href="{{ item.link }}"> 
+        {% endif %}
+            <div data-verified="{{ item.verified }}" class="test-con t flex row algn-cntr">
+                {% if item.image %}
+                <img class="image whiteback" src="/images/{{ item.image }}">
+                {% endif %}
+                <div class="words-con col-1">
+                    {% if username.lower() in admins %}
+                    <div class="but-con col-1 flex row no-wrap">
+                        <a class="button" href="/dashboard/testimonials/edit/{{ item.key().id() }}">Edit</a>
+                        <a class="button" href="/dashboard/testimonials/delete/{{ item.key().id() }}">Delete</a>
+                    </div>
                     {% endif %}
-                    {% if item.link %}
-                    <div class="info-tag">Portfolio Link</div>
-                    {% endif %}
+                    <div class="info-con">
+                        {% if item.verified %}
+                        <div class="info-tag">Verified</div>
+                        {% else %}
+                        <div class="info-tag">Pending Review</div>
+                        {% endif %}
+                        {% if item.link %}
+                        <div class="info-tag">Portfolio Link</div>
+                        {% endif %}
+                    </div>
+                    <h3>{{ item.company }}</h3>
+                    <p>"{{ item.review }}"</p>
+                    <p>- {{ item.name }} - {{ item.rating }}/5</p>
                 </div>
-                <h3>{{ item.company }}</h3>
-                <p>"{{ item.review }}"</p>
-                <p>- {{ item.name }} - {{ item.rating }}/5</p>
             </div>
-        </div>
-    {% if item.link %}
-    </a>
-    {% endif %}
+        {% if item.link %}
+        </a>
+        {% endif %}
     {% endfor %}
 </div>
 {% endblock %}

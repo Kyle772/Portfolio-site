@@ -7,9 +7,15 @@
         {% if blog.image != None %}
         <img class="image col-1" src="{{ blog.image }}">
         {% endif %}
-        <a class="no-link" href="/blog/{{blog.key().id()}}">
-            <h3>{% if blog.project_cat != 'None' %}{{ blog.project_cat }} - {% endif %}{{ blog.title }}</h3>
-        </a>
+        <div class="blog-title-con flex row col-1 no-wrap">
+            <a class="no-link col-1" href="/blog/{{blog.key().id()}}">
+                <h3>{% if blog.project_cat != 'None' %}{{ blog.project_cat }} - {% endif %}{{ blog.title }}</h3>
+            </a>
+            {% if username.lower() in admins %}
+            <a class="button" href="/dashboard/blog/edit/{{ blog.key().id() }}">Edit</a>
+            <a class="button" href="/dashboard/blog/delete/{{ blog.key().id() }}">Delete</a>
+            {% endif %}
+        </div>
         <p class="title-info">Kyle Diggs - {{ blog.created.strftime('%m-%d-%Y') }}</p>
         <div class="blog-body flex row">
             <div class="content">{{ blog.content | safe }}</div>

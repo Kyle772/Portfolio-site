@@ -1468,6 +1468,7 @@ a .test-con:hover {
 }
 
 .review-con {
+    position: relative;
     color: white;
 }
 
@@ -1541,6 +1542,28 @@ a.review-con {
 
 .blog-sub-con {
     display: none;
+}
+
+.words-con {
+    position: relative;
+    min-height: 200px;
+}
+
+.words-con > .but-con {
+    position: absolute;
+    justify-content: flex-end;
+}
+
+.blog-title-con .button, .words-con .button {
+    background-color: transparent;
+    color: white;
+    align-self: center;
+    padding-top: 7px;
+    text-decoration: none;
+    box-sizing: border-box;
+    border: 3px solid white;
+    font-weight: 700;
+    margin: 10px;
 }
 
 .blog-con  > .blog:first-of-type .blog-sub-con {

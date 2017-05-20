@@ -76,6 +76,7 @@ class Handler(webapp2.RequestHandler):
         else:
             username = ''
         navTab = self.get_navTab()
+        admin = self.admin_check()
         self.write(self.render_str(template, user=user, navTab=navTab, username=username, admins=admins, **kw))
         
     def debug(self, text):
@@ -661,9 +662,12 @@ class Blog(Handler):
             self.render("/dash/blog.html", blogs=bq)
         elif "/edit/" in navTab and BID and self.admin_check():
             bq = db.GqlQuery('select * from BlogDB order by created desc')
-            
             b = BlogDB.by_id(BID)
-            self.render("/dash/blog.html", blogs=bq, title=b.title, content=b.content, aside=b.aside, BID=BID)
+            self.render("/dash/blog.html", blogs=bq, blog=b, BID=BID)
+        elif "/delete/" in navTab and BID and self.admin_check():
+            bq = db.GqlQuery('select * from BlogDB order by created desc')
+            b = BlogDB.by_id(BID)
+            self.render("/dash/blog.html", blogs=bq, blog=b, BID=BID)
         elif BID:
             bq = db.GqlQuery("select * from BlogDB where __key__ = KEY('BlogDB', {}) order by created desc".format(BID))
             subscribed = self.read_cookie("subscribed")
@@ -715,23 +719,30 @@ class Blog(Handler):
                            body=return_address)
                 
             self.redirect(navTab)
-            
+        elif "/delete" in navTab and self.admin_check():
+            b = BlogDB.by_id(BID)
+            b.delete()
+            self.redirect('/success?action=dl&message=rd')
         else:
             self.redirect("/404")
             
 class Testimonials(Handler):
     def get(self, TID=''):
-        if self.admin_check():
+        navTab = self.get_navTab()
+        if navTab == "/dashboard/testimonials" and self.admin_check():
             t = db.GqlQuery('select * from TestimonialDB order by created desc')
-            if not TID == '':
-                ts = TestimonialDB.by_id(TID)
-                self.debug("Verified?: {}".format(ts.verified))
-                self.render("/dash/testimonials.html", TID=TID,
-                        image=ts.image, company=ts.company, name=ts.name,
-                        rating=ts.rating, review=ts.review, link=ts.link,
-                        verified=ts.verified, testimonials=t)
-            else:
-                self.render("/dash/testimonials.html", testimonials=t)
+            self.render("/dash/testimonials.html", testimonials=t)
+        elif "/edit/" in navTab and TID and self.admin_check():
+            t = db.GqlQuery('select * from TestimonialDB order by created desc')
+            tst = TestimonialDB.by_id(TID)
+            self.render("/dash/testimonials.html", testimonials=t, tst=tst, TID=TID)
+        elif "/delete/" in navTab and TID and self.admin_check():
+            t = db.GqlQuery('select * from TestimonialDB order by created desc')
+            tst = TestimonialDB.by_id(TID)
+            self.render("/dash/testimonials.html", testimonials=t, tst=tst, TID=TID)
+        elif TID:
+            tst = db.GqlQuery("select * from TestimonialDB where __key__ = KEY('TestimonialDB', {}) order by created desc".format(TID))
+            self.render("blog.html", tst=tst)
         else:
             self.redirect("/404")
         
@@ -744,6 +755,8 @@ class Testimonials(Handler):
         link = self.request.get("link")
         verified = self.request.get("verified")
         
+        navTab = self.get_navTab()
+        
         if self.admin_check():
             pass
         else:
@@ -755,8 +768,7 @@ class Testimonials(Handler):
         else:
             verified = False
         
-        if not TID == '':
-            #Editing
+        if "/edit/" in navTab and self.admin_check():
             if company and name and rating and review:
                 ts = TestimonialDB.by_id(TID)
                 if image:
@@ -778,7 +790,11 @@ class Testimonials(Handler):
                             image=image, company=company, name=name,
                             rating=rating, review=review, link=link,
                             error=error)
-        elif image and company and name and rating and review:
+        elif "/delete/" in navTab and self.admin_check():
+            ts = TestimonialDB.by_id(TID)
+            ts.delete()
+            self.redirect('/success?action=dl&message=rd')
+        elif image and company and name and rating and review and self.admin_check():
             #Placing
             ts = TestimonialDB(image=image, company=company, name=name,
                               rating=rating, review=review, link=link,
@@ -808,8 +824,10 @@ app = webapp2.WSGIApplication([
     ('/dashboard', Dashboard),
     ('/dashboard/testimonials', Testimonials),
     ('/dashboard/testimonials/edit/([0-9]+)', Testimonials),
+    ('/dashboard/testimonials/delete/([0-9]+)', Testimonials),
     ('/dashboard/blog', Blog),
     ('/dashboard/blog/edit/([0-9]+)', Blog),
+    ('/dashboard/blog/delete/([0-9]+)', Blog),
     ('/blog/([0-9]+)', Blog),
     ('/portfolio/new', NewModal),
     ('/portfolio', Portfolio),

@@ -2,14 +2,21 @@
 
 {% block content %}
 <div class="dash-b">
-    <h3><a class="no-link" href="/dashboard">Dashboard</a> > Blogs</h3>
-    <p>{{ 'Editing Blog #{}'.format(BID) if 'edit' in navTab }}</p>
+    <h3>
+        <a class="no-link" href="/dashboard">Dashboard</a> > 
+        <a class="no-link" href="/dashboard/blog/">Blogs</a>{{ ' > ' if blog }}
+        <a class="no-link" href="/blog/{{ BID }}">{{ blog.title if blog }}</a>
+    </h3>
+    <p>
+        {{ 'Editing Blog #{}'.format(BID) if 'edit' in navTab }}
+        {{ 'Delete Blog #{}?'.format(BID) if 'delete' in navTab }}
+    </p>
     <form name="blog" class="blog-form flex col wrap" method="post">
         <p class="col-1">{{ error }}</p>
         <div class="flex row no-wrap col-1">
             <label class="col-2">
                 Title:
-                <input name="title" type="text" value="{{ title }}">
+                <input name="title" type="text" value="{{ blog.title if blog }}">
             </label>
             <label class="col-2">
                 Project Category:
@@ -30,16 +37,16 @@
         <div class="col col-1">
             <label>
                 Body:
-                <textarea class="textarea-tall col-1" name="content" type="text">{{ content }}</textarea>
+                <textarea class="textarea-tall col-1" name="content" type="text">{{ blog.content if blog }}</textarea>
             </label>
             <br>
             <label>
                 Aside:
-                <textarea class="textarea-med col-1" name="aside" type="text">{{ aside }}</textarea>
+                <textarea class="textarea-med col-1" name="aside" type="text">{{ blog.aside if blog }}</textarea>
             </label>
             <br>
             <div class="row col-4">
-                <input class="t button" type="submit" value="Submit">
+                <input class="t button" type="submit" value="{{ 'Delete' if 'delete' in navTab else 'Submit' }}">
             </div>
             <br>
         </div>
@@ -49,6 +56,7 @@
     <table class="query-table col-1">
         <tr>
             <th>Edit</th>
+            <th>Delete</th>
             <th>Image</th>
             <th>Title</th>
             <th>Content</th>
@@ -58,6 +66,7 @@
         {% for item in blogs %}
         <tr data-key="{{ item.key().id() }}">
             <td><a href="/dashboard/blog/edit/{{ item.key().id() }}">Edit</a></td>
+            <td><a href="/dashboard/blog/delete/{{ item.key().id() }}">Delete</a></td>
             <td>{{ 'True' if item.image else 'False' }}</td>
             <td>{{ item.title }}</td>
             <td>{{ item.content[0:150] }}</td>
