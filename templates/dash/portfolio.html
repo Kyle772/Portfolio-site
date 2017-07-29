@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dash-t">
+    <h3>
+        <a class="no-link" href="/dashboard">Dashboard</a> > 
+        <a class="no-link" href="/dashboard/portfolio">Portfolios</a>{{ ' > ' if port }}
+        <a class="no-link">{{ port.name if port }}</a>
+    </h3>
+    <p>
+        {{ 'Editing Portfolio #{}'.format(pid) if 'edit' in navTab }}
+        {{ 'Delete Portfolio #{}?'.format(pid) if 'delete' in navTab }}
+    </p>
+    <form name="testimonial" class="testimonial-form flex wrap" method="post">
+        <p class="col-1">{{ error }}</p>
+        <div class="flex col no-wrap col-2 rp">
+            <label>
+                Name:
+                <input name="name" type="text" value="{{ port.name if port }}">
+            </label>
+            <label>
+                Company/project name:
+                <input name="company" type="text" value="{{ port.company if port }}">
+            </label>
+        </div>
+        <div class="flex col no-wrap col- lp">
+            <label>
+                Link:
+                <input name="link" type="text" value="{{ port.link if port }}">
+            </label>
+            <label>
+                Section:
+                <select name="section">
+                    {% for section in sections %}
+                    <option 
+                        {% if chosen == section %}
+                        selected=selected
+                        {% elif port and port.section == section %}
+                        selected=selected
+                        {% else %}
+                        {% endif %}
+                        value="{{ section }}">{{ section.title() }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+        </div>
+        <div class="flex col no-wrap col-1">
+            <label>
+                Portfolio body:
+                <textarea class="textarea-med" name="body" type="text">{{ port.body if port }}</textarea>
+            </label>
+            <div class="row col-4">
+                <label>
+                    Image:
+                    <input name="image" type="file">
+                </label>
+            </div>
+            <div class="row col-4">
+                <input class="t button" type="submit" value="{{ 'Delete' if '/delete' in navTab else 'Submit' }}">
+            </div>
+        </div>
+    </form>
+    <br>
+</div>
+<br><br>
+<div class="item-sel flex col left-align">
+    <table class="query-table col-1">
+        <tr>
+            <th>Edit</th>
+            <th>Delete</th>
+            <th>Image</th>
+            <th>Company</th>
+            <th>Name</th>
+            <th>Body</th>
+        </tr>
+        {% for item in items %}
+        <tr data-key="{{ item.key().id() }}">
+            <td><a href="/dashboard/portfolio/edit/{{ item.key().id() }}">Edit</a></td>
+            <td><a href="/dashboard/portfolio/delete/{{ item.key().id() }}">Delete</a></td>
+            <td>{{ item.image }}</td>   
+            <td>{{ item.company }}</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.body[0:150] }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+</div>
+{% endblock %}

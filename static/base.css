@@ -1455,6 +1455,10 @@ a .test-con:hover {
     transform: translateY(2px);
 }
 
+.query-table {
+    margin-bottom: 30px;
+}
+
 .query-table tbody {
     vertical-align: top;
 }

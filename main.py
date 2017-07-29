@@ -76,6 +76,7 @@ class Handler(webapp2.RequestHandler):
         else:
             username = ''
         navTab = self.get_navTab()
+        currentTabs = self.get_currentTabs()
         admin = self.admin_check()
         self.write(self.render_str(template, user=user, navTab=navTab, username=username, admins=admins, **kw))
         
@@ -136,10 +137,6 @@ class Handler(webapp2.RequestHandler):
     def get_user(self):
         return User.by_id(self.read_cookie('user-id'))
     
-    def get_navTab(self):
-        s = str(self.request.path)
-        return s
-
     def login(self, user):
         self.make_cookie('user-id', str(user.key().id()))
 
@@ -148,6 +145,14 @@ class Handler(webapp2.RequestHandler):
             'Set-Cookie',
             'user-id=; Path=/')
 
+    def get_navTab(self):
+        s = str(self.request.path)
+        return s
+        
+    def get_currentTabs(self):
+        s = str(self.request.path)
+        s = s.rsplit('/', 1)
+        return s
         
 # -----
 # --Security functions
@@ -257,13 +262,13 @@ class User(db.Model):
         uid = self.read_cookie('user-id')
         return User.name_by_id(uid)
 
-class ModalDB(db.Model):
-    mainImage = db.StringProperty()
-    images = db.ListProperty(item_type=str)
-    head = db.StringProperty(required=True)
-    sub = db.StringProperty(required=True)
-    main = db.TextProperty(required=True)
-    cat = db.StringProperty()
+class PortfolioDB(db.Model):
+    name = db.StringProperty(required=True)
+    company = db.StringProperty(required=True)
+    link = db.LinkProperty()
+    image = db.StringProperty(required=True)
+    body = db.TextProperty(required=True)
+    section = db.StringProperty(required=True)
     created = db.DateTimeProperty(auto_now_add=True)
     
     def _render_text(self):
@@ -276,6 +281,13 @@ class ModalDB(db.Model):
     @classmethod
     def render_txt(cls, text):
         return text.replace('\n', '<br>')
+    
+    @classmethod
+    def by_id(cls, uid):
+        if uid:
+            return cls.get_by_id(int(uid))
+        else:
+            return None
         
 class TestimonialDB(db.Model):
     image = db.StringProperty()
@@ -308,105 +320,15 @@ class BlogDB(db.Model):
             return cls.get_by_id(int(uid))
         else:
             return None
-    
-class NewModal(Handler):
-    def get(self):
-        if self.get_user():
-            self.render('newitem.html')
-        else:
-            error = "Sorry! You need to login to do that!"
-            self.redirect("/login")
-    
-    def post(self):
-        images = self.request.get_all('images')
-        mainImage = self.request.get('mainImage')
-        head = self.request.get('head')
-        sub = self.request.get('sub')
-        main = self.request.get('main')
-        cat = self.request.get('cat')
-        error = ""
-        
-        if head and sub and main:
-            m = ModalDB(images=images,
-                        mainImage=mainImage,
-                        head=head,
-                        sub=sub,
-                        main=main,
-                        cat=cat
-                        )
-            m._render_text()
-            m.put()
-            link = '/portfolio/{}/{}'.format(cat.lower(), m.key().id())
-            self.redirect(link)
-            
-        else:
-            error="One of the files doesn't exist"
-            self.render('newitem.html',
-                        images=images,
-                        mainImage=mainImage,
-                        head=head,
-                        sub=sub,
-                        main=main,
-                        cat=cat,
-                        error=error)
 
-class EditModal(Handler):
-    def get(self, home, port_id):
-        if self.get_user():
-            mkey = db.Key.from_path('ModalDB', int(port_id))
-            modal = db.get(mkey)
-            self.render('edititem.html', modal=modal, edit=True)
-        else:
-            self.redirect("/login")
-        
-    def post(self, home, port_id):
-        images = self.request.get_all('images')
-        mainImage = self.request.get('mainImage')
-        head = self.request.get('head')
-        sub = self.request.get('sub')
-        main = self.request.get('main')
-        cat = self.request.get('cat')
-        error = ""
-        
-        mkey = db.Key.from_path('ModalDB', int(port_id))
-        m = db.get(mkey)
-            
-        if images:
-            m.images = images
-        if head:
-            m.head = head
-        if sub:
-            m.sub = sub
-        if main:
-            m.main = main
-        if mainImage:
-            m.mainImage = mainImage
-        m.put()
-        
-        link = '/portfolio/{}/{}'.format(cat, m.key().id())
-        self.redirect(link)
-        
-        if not main or not sub or not head:
-            error="Please fill out ALL required fields!"
-            self.render('newitem.html',
-                        images=images,
-                        head=head,
-                        sub=sub,
-                        main=main,
-                        cat=cat,
-                        error=error)
+#-------------------------------
+#
+#
+# Beginning of pages
+#
+#
+#-------------------------------
 
-class DeleteModal(Handler):
-    def get(self, home, port_id):
-        user = self.get_user()
-        if user:
-            mkey = db.Key.from_path('ModalDB', int(port_id))
-            modal = db.get(mkey)
-            modal.delete()
-            self.redirect("/success?action=dl&message=rd")
-        else:
-            self.redirect("/login")
-            
 # -----
 # --Login pages
 # -----
@@ -500,7 +422,7 @@ class Success(Handler):
 class NotFound(Handler):
     def get(self):
         self.render('404.html')
-            
+
 # ---------------------/
 # --Pages-------------/
 # -------------------/
@@ -519,13 +441,13 @@ class Store(Handler):
         self.render("store.html")
 
 class Portfolio(Handler):
-    order = ["about", "logo", "web", "print", "graphics"]
+    order = ["about", "logo", "web", "graphics"]
     links = {
         "next": "", 
         "prev": "",
         "current": ""
     }
-    
+
     def getLinks(self, page_cat):
         page_cat = page_cat.lower()
         current = self.order.index(page_cat)
@@ -538,18 +460,91 @@ class Portfolio(Handler):
         self.links["current"] = self.order[current]
         return self.links["current"]
     
-    def get(self, page_cat="about"):
-        current = self.getLinks(page_cat)
-        items = ""
-        direction = self.request.get('dir')
+    def get(self, page_cat="about", pid=""):
+        navTab = self.get_navTab()
         
-        if page_cat == "about":
-            pass
+        if "/" == self.request.path or "/portfolio" == self.request.path:
+            self.redirect("/portfolio/about")
+        elif "/dashboard" in navTab and self.admin_check():
+            items = db.GqlQuery('select * from PortfolioDB order by created desc')
+            if "/dashboard/portfolio/edit/" in navTab and not pid == "":
+                sections = self.order[1::]
+                port = PortfolioDB.by_id(pid)
+                self.render('/dash/portfolio.html', sections=sections, port=port, pid=pid, items=items)
+            elif "/dashboard/portfolio/delete/" in navTab and not pid == "":
+                sections = self.order[1::]
+                port = PortfolioDB.by_id(pid)
+                self.render('/dash/portfolio.html', sections=sections, port=port, pid=pid, items=items)
+            elif "/dashboard" in navTab and self.request.get("section"):
+                sections = self.order[1::]
+                self.render('/dash/portfolio.html', sections=sections, chosen=self.request.get("section"), items=items)
+            elif "/dashboard" in navTab:
+                sections = self.order[1::]
+                self.render('/dash/portfolio.html', sections=sections, items=items)
+        elif pid != "":
+            pItem = PortfolioDB.by_id(pid)
+            self.render("portfolio.html", multipage=True, links=self.links, page=page_cat, pItem=pItem)
+            
         else:
-            items = db.GqlQuery('select * from ModalDB where cat = :1', page_cat)
+            current = self.getLinks(page_cat)
+            items = ""
+            direction = self.request.get('dir')
 
-        self.render('portfolio.html', items=items, direction=direction, multipage=True, links=self.links, page=page_cat, admin=self.admin_check())
-        
+            if page_cat == "about":
+                self.render("portfolio.html", multipage=True, links=self.links, page=page_cat, admin=self.admin_check())
+            else:
+                items = db.GqlQuery('select * from PortfolioDB where section = :1 order by created desc', page_cat)
+                self.render('portfolio.html', items=items, direction=direction, multipage=True, links=self.links, page=page_cat, admin=self.admin_check())
+                
+    def post(self, pid=""):
+        navTab = self.get_navTab()
+        if self.admin_check():
+            if ("/dashboard/portfolio/delete/" in navTab and 
+                pid != ""):
+                p = PortfolioDB.by_id(pid)
+                p.delete()    
+                self.redirect("/dashboard")
+                
+            elif "/dashboard/portfolio/edit/" in navTab and not pid == "":
+                name = self.request.get('name')
+                company = self.request.get('company')
+                link = self.request.get('link')
+                section = self.request.get('section')
+                body = self.request.get('body')
+                image = self.request.get('image')
+
+                p = PortfolioDB.by_id(pid)
+                
+                if name and company and link and section and body:
+                    p.name = name
+                    p.company = company
+                    p.link = link
+                    p.section = section
+                    p.body = body
+                
+                if image != "":
+                    p.image = image
+                    
+                p.put()
+
+                self.redirect("/dashboard")
+            elif "dashboard" in navTab:
+                name = self.request.get('name')
+                company = self.request.get('company')
+                link = self.request.get('link')
+                section = self.request.get('section')
+                self.debug(section)
+                body = self.request.get('body')
+                image = self.request.get('image')
+
+                p = PortfolioDB(name=name, company=company, link=link, section=section, body=body, image=image)
+                p.put()
+
+                self.redirect("/dashboard")
+        else:
+            error = "Sorry but you aren't logged in as admin! Log in and try again"
+            self.render("404.html", error=error)
+
 class Pricing(Handler):
     def get(self):
         t = db.GqlQuery('select * from TestimonialDB order by created desc')
@@ -586,48 +581,6 @@ class Pricing(Handler):
             error="It looks like you didn't fill out one of the sections!"
             self.render('pricing.html', error=error, name=name, rating=rating, body=body, project=project, email=return_address)
 
-class Modal(Handler):
-    order = []
-    links = {
-        "next": "", 
-        "prev": "",
-        "current": ""
-    }
-    
-    def popList(self, items):
-        lst = []
-        for item in items:
-            lst.append(str(item.key().id()))
-            
-        return lst
-            
-    
-    def getLinks(self, home, port_id):
-        items = db.GqlQuery('select * from ModalDB where cat = :1', home)
-        
-        self.order = self.popList(items)
-
-        current = self.order.index(port_id)
-        prv = current - 1
-        nxt = current + 1
-        if nxt >= len(self.order):
-            nxt = 0
-        self.links["next"] = self.order[nxt]
-        self.links["prev"] = self.order[prv]
-        self.links["current"] = self.order[current]
-        
-        return self.links["current"]
-    
-    def get(self, home, port_id):
-        mkey = db.Key.from_path('ModalDB', int(port_id))
-        modal = db.get(mkey)
-        direction = self.request.get('dir')
-        links = self.getLinks(home, port_id)
-        items = \
-            db.GqlQuery('select * from ModalDB order by created desc limit 10'
-                        )
-        self.render('portfolio.html', home=home, direction=direction, multipage=True, links=self.links, port_id=int(port_id), modal=modal, items=items, admin=self.admin_check())
-        
 class Contact(Handler):
     def get(self):
         self.render('contact.html')
@@ -655,21 +608,21 @@ class Dashboard(Handler):
         self.admin_check("dash.html")
         
 class Blog(Handler):
-    def get(self, BID=""):
+    def get(self, bid=""):
         navTab = self.get_navTab()
         if navTab == "/dashboard/blog" and self.admin_check():
             bq = db.GqlQuery('select * from BlogDB order by created desc')
             self.render("/dash/blog.html", blogs=bq)
-        elif "/edit/" in navTab and BID and self.admin_check():
+        elif "/edit/" in navTab and bid and self.admin_check():
             bq = db.GqlQuery('select * from BlogDB order by created desc')
-            b = BlogDB.by_id(BID)
-            self.render("/dash/blog.html", blogs=bq, blog=b, BID=BID)
-        elif "/delete/" in navTab and BID and self.admin_check():
+            b = BlogDB.by_id(bid)
+            self.render("/dash/blog.html", blogs=bq, blog=b, bid=bid)
+        elif "/delete/" in navTab and bid and self.admin_check():
             bq = db.GqlQuery('select * from BlogDB order by created desc')
-            b = BlogDB.by_id(BID)
-            self.render("/dash/blog.html", blogs=bq, blog=b, BID=BID)
-        elif BID:
-            bq = db.GqlQuery("select * from BlogDB where __key__ = KEY('BlogDB', {}) order by created desc".format(BID))
+            b = BlogDB.by_id(bid)
+            self.render("/dash/blog.html", blogs=bq, blog=b, bid=bid)
+        elif bid:
+            bq = db.GqlQuery("select * from BlogDB where __key__ = KEY('BlogDB', {}) order by created desc".format(bid))
             subscribed = self.read_cookie("subscribed")
             self.render("blog.html", blogs=bq, subscribed=subscribed)
         else:
@@ -677,37 +630,42 @@ class Blog(Handler):
             subscribed = self.read_cookie("subscribed")
             self.render("blog.html", blogs=bq, subscribed=subscribed)
             
-    def post(self, BID=""):
+    def post(self, bid=""):
         navTab = self.get_navTab()
-        if "/dashboard/blog" in navTab and self.admin_check():
-            title = self.request.get("title")
-            project_cat = self.request.get("project_cat")
-            image = self.request.get("image")
-            content = self.request.get("content")
-            aside = self.request.get("aside")
-            
-            if BID and self.admin_check():
-                b = BlogDB.by_id(BID)
-                if image:
-                    b.image = image;
-                if project_cat:
-                    b.project_cat = project_cat
-                b.title = title
-                b.content = content
-                b.aside = aside
-                b.put()
-            else:
-                b = BlogDB()
-                if image:
-                    b.image = image;
-                if project_cat:
-                    b.project_cat = project_cat
-                b.title = title
-                b.content = content
-                b.aside = aside
-                b.put()
-            
-            self.redirect("/dashboard/blog")
+        if self.admin_check():
+            if "/dashboard/blog/delete" in navTab and bid != "":
+                b = BlogDB.by_id(bid)
+                b.delete()
+                self.redirect("/dashboard")
+            elif "/dashboard/blog" in navTab:
+                title = self.request.get("title")
+                project_cat = self.request.get("project_cat")
+                image = self.request.get("image")
+                content = self.request.get("content")
+                aside = self.request.get("aside")
+
+                if bid:
+                    b = BlogDB.by_id(bid)
+                    if image:
+                        b.image = image;
+                    if project_cat:
+                        b.project_cat = project_cat
+                    b.title = title
+                    b.content = content
+                    b.aside = aside
+                    b.put()
+                else:
+                    b = BlogDB()
+                    if image:
+                        b.image = image;
+                    if project_cat:
+                        b.project_cat = project_cat
+                    b.title = title
+                    b.content = content
+                    b.aside = aside
+                    b.put()
+
+                self.redirect("/dashboard/blog")
         elif "/blog" in navTab and self.request.get("email"):
             return_address = self.request.get('email')
             sender_address = "Contact-form@website-157906.appspotmail.com"
@@ -720,33 +678,33 @@ class Blog(Handler):
                 
             self.redirect(navTab)
         elif "/delete" in navTab and self.admin_check():
-            b = BlogDB.by_id(BID)
+            b = BlogDB.by_id(bid)
             b.delete()
             self.redirect('/success?action=dl&message=rd')
         else:
             self.redirect("/404")
             
 class Testimonials(Handler):
-    def get(self, TID=''):
+    def get(self, tid=''):
         navTab = self.get_navTab()
         if navTab == "/dashboard/testimonials" and self.admin_check():
             t = db.GqlQuery('select * from TestimonialDB order by created desc')
             self.render("/dash/testimonials.html", testimonials=t)
-        elif "/edit/" in navTab and TID and self.admin_check():
+        elif "/edit/" in navTab and tid and self.admin_check():
             t = db.GqlQuery('select * from TestimonialDB order by created desc')
-            tst = TestimonialDB.by_id(TID)
-            self.render("/dash/testimonials.html", testimonials=t, tst=tst, TID=TID)
-        elif "/delete/" in navTab and TID and self.admin_check():
+            tst = TestimonialDB.by_id(tid)
+            self.render("/dash/testimonials.html", testimonials=t, tst=tst, tid=tid)
+        elif "/delete/" in navTab and tid and self.admin_check():
             t = db.GqlQuery('select * from TestimonialDB order by created desc')
-            tst = TestimonialDB.by_id(TID)
-            self.render("/dash/testimonials.html", testimonials=t, tst=tst, TID=TID)
-        elif TID:
-            tst = db.GqlQuery("select * from TestimonialDB where __key__ = KEY('TestimonialDB', {}) order by created desc".format(TID))
+            tst = TestimonialDB.by_id(tid)
+            self.render("/dash/testimonials.html", testimonials=t, tst=tst, tid=tid)
+        elif tid:
+            tst = db.GqlQuery("select * from TestimonialDB where __key__ = KEY('TestimonialDB', {}) order by created desc".format(tid))
             self.render("blog.html", tst=tst)
         else:
             self.redirect("/404")
         
-    def post(self, TID=''):
+    def post(self, tid=''):
         image = self.request.get("image")
         company = self.request.get("company")
         name = self.request.get("name")
@@ -770,7 +728,7 @@ class Testimonials(Handler):
         
         if "/edit/" in navTab and self.admin_check():
             if company and name and rating and review:
-                ts = TestimonialDB.by_id(TID)
+                ts = TestimonialDB.by_id(tid)
                 if image:
                     ts.image = image
                 ts.company = company
@@ -791,7 +749,7 @@ class Testimonials(Handler):
                             rating=rating, review=review, link=link,
                             error=error)
         elif "/delete/" in navTab and self.admin_check():
-            ts = TestimonialDB.by_id(TID)
+            ts = TestimonialDB.by_id(tid)
             ts.delete()
             self.redirect('/success?action=dl&message=rd')
         elif image and company and name and rating and review and self.admin_check():
@@ -812,31 +770,40 @@ class Testimonials(Handler):
         
             
 app = webapp2.WSGIApplication([
-    ('/', Portfolio),
-    ('/pricing', Pricing),
-    ('/contact', Contact),
+    # Authentication and response/redirects
     ('/login', Login),
     ('/logout', Logout),
     ('/register', SignUp),
     ('/success', Success),
+    ('/thanks', Thanks),
+    
+    # Main Pages for regulars
+    ('/', Portfolio),
+    ('/pricing', Pricing),
+    ('/contact', Contact),
     ('/resume', Resume),
     ('/blog', Blog),
-    ('/dashboard', Dashboard),
-    ('/dashboard/testimonials', Testimonials),
-    ('/dashboard/testimonials/edit/([0-9]+)', Testimonials),
-    ('/dashboard/testimonials/delete/([0-9]+)', Testimonials),
-    ('/dashboard/blog', Blog),
-    ('/dashboard/blog/edit/([0-9]+)', Blog),
-    ('/dashboard/blog/delete/([0-9]+)', Blog),
     ('/blog/([0-9]+)', Blog),
-    ('/portfolio/new', NewModal),
-    ('/portfolio', Portfolio),
-    ('/portfolio/([\w]+)/([0-9]+)', Modal),
-    ('/portfolio/([\w]+)/([0-9]+)/delete', DeleteModal),
-    ('/portfolio/([\w]+)/([0-9]+)/edit', EditModal),
-    ('/portfolio/([\w]+)', Portfolio),
     ('/store', Store),
-    ('/thanks', Thanks),
+    
+    ## Grouped Handlers
+    ('/portfolio', Portfolio),
+    ('/portfolio/([\w]+)/([0-9]+)', Portfolio),
+    ('/portfolio/([\w]+)', Portfolio),
+    
+    # Admin Pages
+    webapp2.Route('/dashboard', Dashboard),
+    webapp2.Route('/dashboard/portfolio', Portfolio),
+    webapp2.Route('/dashboard/portfolio/edit/<pid:[0-9]+>', Portfolio),
+    webapp2.Route('/dashboard/portfolio/delete/<pid:[0-9]+>', Portfolio),
+    webapp2.Route('/dashboard/testimonials', Testimonials),
+    webapp2.Route('/dashboard/testimonials/edit/<tid:[0-9]+>', Testimonials),
+    webapp2.Route('/dashboard/testimonials/delete/<tid:[0-9]+>', Testimonials),
+    webapp2.Route('/dashboard/blog', Blog),
+    webapp2.Route('/dashboard/blog/edit/<bid:[0-9]+>', Blog),
+    webapp2.Route('/dashboard/blog/delete/<bid:[0-9]+>', Blog),
+    
+    # Catch alls
     ('/404', NotFound),
     ('/.*', NotFound)
     ], debug=True)

@@ -21,3 +21,9 @@ indexes:
   - name: post_id
   - name: created
     direction: desc
+
+- kind: PortfolioDB
+  properties:
+  - name: section
+  - name: created
+    direction: desc

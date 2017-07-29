@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block head %}
-    {% if modal %}
+    {% if pItem %}
         <style>
             .page {
                 -webkit-animation: fly-in 300ms forwards;
@@ -24,28 +24,24 @@
     </style>
 {% endblock %}
 
-{% block modal %}
-
-{% endblock %}
-
 {% block port %}
-{% if modal %}
+{% if pItem %}
     {% if direction %}
         <div class="port-item constrain fly-in-{{ direction }} t">
     {% else %}
     <div class="port-item constrain fly-in t">
     {% endif %}
         <div class="infocon flex row nowrap">
-            <img src="/images/{{modal.mainImage}}">
+            <img src="/images/{{pItem.mainImage}}">
             <div class="info">
-                <h3>{{modal.head}}</h3>
+                <h3>{{pItem.head}}</h3>
                 <p>
-                    Upload date: {{modal.created.strftime("%b %d, %Y")}}
+                    Upload date: {{pItem.created.strftime("%b %d, %Y")}}
                 <p>
-                <p>{{modal.sub}}</p>
+                <p>{{pItem.sub}}</p>
             </div>
             <div class="flex row no-wrap port-buttons">
-                <a class="cta t title-side" href="/portfolio/{{home}}?dir=up">X</a>
+                <a class="cta t title-side" href="/portfolio/{{ page }}?dir=up">X</a>
                 {% if admin %}
                     <a class="cta t title-side" href="{{port_id}}/delete">Delete</a>
                     <a class="cta t title-side" href="{{port_id}}/edit">Edit</a>
@@ -54,11 +50,11 @@
         </div>
         <h3>Related images</h3>
         <div class="images flex row wrap spc-arnd">
-        {% for item in modal.images %}
+        {% for item in pItem.images %}
             <img class="lightbox-img" src="/images/{{item}}">
         {% endfor %}
         </div>
-        {{modal.render_txt(modal.main) | safe}}
+        {{pItem.render_txt(pItem.body) | safe}}
     </div>
 {% elif "about" in page %}
 <div class="intro flex col no-wrap">
@@ -77,7 +73,7 @@
 {% elif "logo" in page %}
 <div class="title">
     {% if admin %}
-        <a class="cta title-side" href="/portfolio/new">New</a>
+        <a class="cta title-side" href="/dashboard/portfolio?section=logo">New</a>
     {% endif %}
     <h3>Logos</h3>
     <div class="portCon flex row wrap spc-btwn">
@@ -91,7 +87,7 @@
 {% elif "web" in page %}
 <div class="title">
     {% if admin %}
-        <a class="cta title-side" href="/portfolio/new">New</a>
+        <a class="cta title-side" href="/dashboard/portfolio?section=web">New</a>
     {% endif %}
     <h3>Websites</h3>
     <div class="portCon flex row wrap spc-btwn">
@@ -102,24 +98,10 @@
     {% endfor %}
     </div>
 </div>
-{% elif "print" in page %}
-<div class="title">
-    {% if admin %}
-        <a class="cta title-side" href="/portfolio/new">New</a>
-    {% endif %}
-    <h3>Print Work</h3>
-    <div class="portCon flex row wrap spc-btwn">
-    {% for item in items %}
-        <a href="/portfolio/print/{{item.key().id()}}" class="portItem">
-            <img src="/images/{{item.mainImage}}">
-        </a>
-    {% endfor %}
-    </div>
-</div>
 {% elif "graphics" in page %}
 <div class="title">
     {% if admin %}
-        <a class="cta title-side" href="/portfolio/new">New</a>
+        <a class="cta title-side" href="/dashboard/portfolio?section=graphics">New</a>
     {% endif %}
     <h3>Graphics</h3>
     <div class="portCon flex row wrap spc-btwn">
